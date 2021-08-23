@@ -2,14 +2,20 @@
 <head>
    <meta charset="utf-8">
    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-   <title>WebGPU Step-by-Step 4</title>
+   <title>WebGPU Step-by-Step 6</title>
    <meta name="description" content="">
    <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 
 <body>
     <div>
-        <h1>Triangle with Vertex Color</h1><br>
+        <h1>Create Triangle Primitives</h1><br>
+        <label><b>Select a primitive type:</b></label>
+        <select id="id-primitive">
+           <option value="triangle-list">triangle-list</option>
+           <option value="triangle-strip">triangle-strip</option>
+        </select>
+        <br><br>
         <canvas id="canvas-webgpu" width="1600" height="900"></canvas>
     </div>
     <script src="main.bundle.js"></script>
