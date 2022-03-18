@@ -10,7 +10,7 @@
   "author": "Damjan Kovačič",
   "license": "ISC",
   "devDependencies": {
-    "@types/three": "^0.137.0",
+    "@types/three": "^0.138.0",
     "clean-webpack-plugin": "^4.0.0",
     "css-loader": "^6.5.1",
     "file-loader": "^6.2.0",
@@ -23,6 +23,6 @@
   },
   "dependencies": {
     "reflect-metadata": "^0.1.13",
-    "three": "^0.137.5"
+    "three": "^0.138.3"
   }
 }

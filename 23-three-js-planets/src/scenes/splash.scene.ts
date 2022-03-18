@@ -1,41 +1,48 @@
-import {
-    DoubleSide,
-    Mesh,
-    MeshBasicMaterial,
-    OrthographicCamera,
-    PlaneGeometry,
-    Scene,
-    TextureLoader,
-    Vector2,
-} from 'three';
+import { Mesh, MeshBasicMaterial, OrthographicCamera, PlaneGeometry, Scene, Vector2 } from 'three';
 import { Injectable } from '../ioc/injector';
 import SceneProvider from '../providers/scene.provider';
 import ViewportProvider from '../providers/viewport.provider';
-import { OnRender, OnViewResize, OnUpdate } from '../util/lifecycle';
 import BaseScene from './base-scene';
-import splashSrc from '../assets/splash.jpg';
+import Entity from '../entity/entity';
+import SceneComponent from '../components/scene.component';
+import CameraComponent from '../components/camera.component';
+import PlaneFactory from '../factories/plane.factory';
+import EntityProvider from '../providers/entity.provider';
+import CameraSystem from '../systems/camera.system';
+import MeshSystem from '../systems/mesh.system';
 import GameScene from './game.scene';
 
 @Injectable()
-export default class SplashScene extends BaseScene implements OnUpdate, OnRender, OnViewResize {
-    private camera: OrthographicCamera;
-    private plane: Mesh<PlaneGeometry, MeshBasicMaterial>;
-
+export default class SplashScene extends BaseScene {
     private readonly bounds = 0.6;
     private readonly splashDuration = 500;
 
-    constructor(private viewportProvider: ViewportProvider, private sceneProvider: SceneProvider) {
+    constructor(
+        private viewportProvider: ViewportProvider,
+        private sceneProvider: SceneProvider,
+        private entityProvider: EntityProvider,
+        private planeFactory: PlaneFactory,
+        private cameraSystem: CameraSystem,
+        private meshSystem: MeshSystem
+    ) {
         super();
-        this.scene = new Scene();
-        const bounds = this.getViewBounds();
-        this.camera = new OrthographicCamera(-bounds.x, bounds.x, bounds.y, -bounds.y, -1, 10);
-        this.camera.position.z = 5;
+    }
 
-        const planeGeometry = new PlaneGeometry(1.2, 0.859);
-        const planeTexture = new TextureLoader().load(splashSrc);
-        const planeMaterial = new MeshBasicMaterial({ color: 0xffffff, side: DoubleSide, map: planeTexture });
-        this.plane = new Mesh(planeGeometry, planeMaterial);
-        this.scene.add(this.plane);
+    async init() {
+        const sceneEntity = new Entity();
+        const sceneComponent = new SceneComponent({ scene: new Scene() });
+
+        const bounds = this.getViewBounds();
+        const camera = new OrthographicCamera(-bounds.x, bounds.x, bounds.y, -bounds.y, -1, 10);
+        camera.position.z = 5;
+        const cameraComponent = new CameraComponent({ camera });
+
+        const planeEntity = await this.planeFactory.generateSplashPlane();
+
+        sceneEntity.push(sceneComponent);
+        sceneEntity.push(cameraComponent);
+        this.entityProvider.pushNextScene(sceneEntity);
+        this.entityProvider.pushNextScene(planeEntity);
 
         setTimeout(() => this.sceneProvider.switchScene(GameScene), this.splashDuration);
     }
@@ -47,20 +54,5 @@ export default class SplashScene extends BaseScene implements OnUpdate, OnRender
         const xBound = this.bounds * xAspect;
         const yBound = this.bounds * yAspect;
         return new Vector2(xBound, yBound);
-    }
-
-    onUpdate() {}
-
-    onRender() {
-        this.viewportProvider.Renderer.render(this.scene, this.camera);
-    }
-
-    onViewResize() {
-        const bounds = this.getViewBounds();
-        this.camera.left = -bounds.x;
-        this.camera.right = bounds.x;
-        this.camera.top = bounds.y;
-        this.camera.bottom = -bounds.y;
-        this.camera.updateProjectionMatrix();
     }
 }

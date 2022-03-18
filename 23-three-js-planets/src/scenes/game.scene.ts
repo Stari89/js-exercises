@@ -1,62 +1,77 @@
-import {
-    BoxGeometry,
-    DirectionalLight,
-    Group,
-    Mesh,
-    MeshPhongMaterial,
-    PerspectiveCamera,
-    Scene,
-    Vector3,
-} from 'three';
+import { DirectionalLight, Group, PerspectiveCamera, Scene } from 'three';
 import { Injectable } from '../ioc/injector';
 import ViewportProvider from '../providers/viewport.provider';
-import { OnRender, OnViewResize, OnUpdate } from '../util/lifecycle';
 import BaseScene from './base-scene';
-import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
-import sceneSrc from '../assets/planet/scene.glb';
+import PlanetFactory from '../factories/planet.factory';
+import EntityProvider from '../providers/entity.provider';
+import InvaderFactory from '../factories/invader.factory';
+import InvaderComponent from '../components/invader.component';
+import InvaderSystem from '../systems/invader.system';
+import Entity from '../entity/entity';
+import SceneComponent from '../components/scene.component';
+import CameraComponent from '../components/camera.component';
+import CameraSystem from '../systems/camera.system';
+import LightComponent from '../components/light.component';
+import LightSystem from '../systems/light.system';
+import PlanetSystem from '../systems/planet.system';
 
 @Injectable()
-export default class GameScene extends BaseScene implements OnUpdate, OnRender, OnViewResize {
-    private camera: PerspectiveCamera;
-    private planet: Group;
-
-    constructor(private viewportProvider: ViewportProvider) {
+export default class GameScene extends BaseScene {
+    constructor(
+        private viewportProvider: ViewportProvider,
+        private entityProvider: EntityProvider,
+        private planetFactory: PlanetFactory,
+        private invaderFactory: InvaderFactory,
+        private cameraSystem: CameraSystem,
+        private lightSystem: LightSystem,
+        private planetSystem: PlanetSystem,
+        private invaderSystem: InvaderSystem
+    ) {
         super();
-        this.scene = new Scene();
-        this.camera = new PerspectiveCamera(75, viewportProvider.Aspect, 0.1, 1000);
-        this.camera.position.z = 5;
+    }
 
-        const loader = new GLTFLoader();
-        loader.load(sceneSrc, (gltf) => {
-            this.planet = gltf.scene;
-            this.planet.scale.x = 15;
-            this.planet.scale.y = 15;
-            this.planet.scale.z = 15;
-            this.scene.add(this.planet);
-
-            const light = new DirectionalLight(0xffffff, 3);
-            light.position.x = 1;
-            light.position.y = 1;
-            light.position.z = 10;
-            this.scene.add(light);
-            this.viewportProvider.Renderer.setClearColor(0x8888ff);
+    async init() {
+        const sceneEntity = new Entity();
+        const sceneComponent = new SceneComponent({ scene: new Scene() });
+        sceneEntity.push(sceneComponent);
+        const cameraComponent = new CameraComponent({
+            camera: new PerspectiveCamera(75, this.viewportProvider.Aspect, 0.1, 1000),
         });
-    }
+        cameraComponent.camera.position.z = 5;
+        sceneEntity.push(cameraComponent);
+        this.entityProvider.pushNextScene(sceneEntity);
 
-    onUpdate() {
-        if (!this.planet) {
-            return;
+        const planetEntity = await this.planetFactory.generatePlanet();
+        this.entityProvider.pushNextScene(planetEntity);
+
+        for (let i = 0; i < 750; i++) {
+            const iType = Math.floor(Math.random() * 4);
+
+            const invaderEntity = await this.invaderFactory.generateInvader(iType);
+            const invaderComponent = invaderEntity.get(InvaderComponent);
+
+            invaderComponent.frameSwitch = 300 + Math.random() * 1000 * 2;
+            invaderComponent.rotationSpeed = Math.random() * 0.01;
+            const x = (Math.random() - 0.5) * 15;
+            const y = (Math.random() - 0.5) * 15;
+
+            invaderComponent.meshList.forEach((m) => {
+                m.position.x = x;
+                m.position.y = y;
+            });
+            this.entityProvider.pushNextScene(invaderEntity);
         }
-        // this.planet.rotation.x += 0.01;
-        this.planet.rotation.y += 0.001;
-    }
 
-    onRender() {
-        this.viewportProvider.Renderer.render(this.scene, this.camera);
-    }
+        const light = new DirectionalLight(0xffffff, 3);
+        light.position.x = 1;
+        light.position.y = 1;
+        light.position.z = 10;
 
-    onViewResize() {
-        this.camera.aspect = this.viewportProvider.Aspect;
-        this.camera.updateProjectionMatrix();
+        const lightComponent = new LightComponent({ light });
+        const lightEntity = new Entity();
+        lightEntity.push(lightComponent);
+        this.entityProvider.pushNextScene(lightEntity);
+
+        this.viewportProvider.Renderer.setClearColor(0x8888ff);
     }
 }

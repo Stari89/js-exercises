@@ -9,6 +9,8 @@ export enum LifecycleEvents {
     OnRender = 'onRender',
     OnStop = 'onStop',
     OnViewResize = 'onViewResize',
+    OnSceneInit = 'onSceneInit',
+    OnSceneInited = 'onSceneInited',
 }
 
 export interface OnRun {
@@ -34,4 +36,10 @@ export interface OnStop {
 }
 export interface OnViewResize {
     onViewResize: () => void;
+}
+export interface OnSceneInit {
+    onSceneInit: () => void;
+}
+export interface OnSceneInited {
+    onSceneInited: () => void;
 }
