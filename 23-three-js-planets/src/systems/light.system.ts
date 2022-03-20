@@ -9,12 +9,9 @@ export default class LightSystem implements OnSceneInited {
     constructor(private entityProvider: EntityProvider) {}
 
     onSceneInited() {
-        this.entityProvider.getEntitiesWithComponents(LightComponent).forEach((le) => {
-            const l = le.get(LightComponent);
-            this.entityProvider.getEntitiesWithComponents(SceneComponent).forEach((se) => {
-                const s = se.get(SceneComponent);
-                s.scene.add(l.light);
-            });
+        const s = this.entityProvider.getFirstComponent(SceneComponent);
+        this.entityProvider.getComponents(LightComponent).forEach((l) => {
+            s.scene.add(l.light);
         });
     }
 }

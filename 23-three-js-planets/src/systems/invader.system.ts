@@ -12,12 +12,9 @@ export default class InvaderSystem implements OnSceneInited, OnUpdate {
     constructor(private entityProvider: EntityProvider) {}
 
     onSceneInited() {
-        this.entityProvider.getEntitiesWithComponents(InvaderComponent).forEach((ie) => {
-            const ic = ie.get(InvaderComponent);
-            this.entityProvider.getEntitiesWithComponents(SceneComponent).forEach((se) => {
-                const sc = se.get(SceneComponent);
-                sc.scene.add(ic.meshList[0]);
-            });
+        const s = this.entityProvider.getFirstComponent(SceneComponent);
+        this.entityProvider.getComponents(InvaderComponent).forEach((i) => {
+            s.scene.add(i.meshList[0]);
         });
 
         this.inited = true;
@@ -26,27 +23,24 @@ export default class InvaderSystem implements OnSceneInited, OnUpdate {
     onUpdate(loopInfo: ILoopInfo) {
         if (!this.inited) return;
 
-        this.entityProvider.getEntitiesWithComponents(InvaderComponent).forEach((ie) => {
-            const ic = ie.get(InvaderComponent);
-
-            this.entityProvider.getEntitiesWithComponents(SceneComponent).forEach((se) => {
-                const sc = se.get(SceneComponent);
-                if (ic.lastFrameSwitch + ic.frameSwitch > loopInfo.t) {
-                    return;
-                }
-                sc.scene.remove(ic.meshList[ic.frame]);
-                ic.frame++;
-                if (ic.frame === ic.meshList.length) {
-                    ic.frame = 0;
-                }
-                ic.lastFrameSwitch = loopInfo.t;
-                sc.scene.add(ic.meshList[ic.frame]);
+        const s = this.entityProvider.getFirstComponent(SceneComponent);
+        this.entityProvider.getComponents(InvaderComponent).forEach((i) => {
+            // rotation
+            i.meshList.forEach((m) => {
+                m.rotation.z += i.rotationSpeed;
+                m.rotation.y += i.rotationSpeed * 5;
             });
 
-            ic.meshList.forEach((m) => {
-                m.rotation.z += ic.rotationSpeed;
-                m.rotation.y += ic.rotationSpeed * 5;
-            });
+            // keyframe switch after elapsed time
+            if (i.lastFrameSwitch + i.frameSwitch < loopInfo.t) {
+                s.scene.remove(i.meshList[i.frame]);
+                i.frame++;
+                if (i.frame === i.meshList.length) {
+                    i.frame = 0;
+                }
+                i.lastFrameSwitch = loopInfo.t;
+                s.scene.add(i.meshList[i.frame]);
+            }
         });
     }
 }

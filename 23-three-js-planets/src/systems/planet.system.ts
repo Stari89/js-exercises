@@ -12,23 +12,18 @@ export default class PlanetSystem implements OnSceneInited, OnUpdate {
     constructor(private entityProvider: EntityProvider) {}
 
     onSceneInited() {
-        this.entityProvider.getEntitiesWithComponents(PlanetComponent).forEach((pe) => {
-            const pc = pe.get(PlanetComponent);
-            this.entityProvider.getEntitiesWithComponents(SceneComponent).forEach((se) => {
-                const sc = se.get(SceneComponent);
-                sc.scene.add(pc.tGroup);
-            });
+        const s = this.entityProvider.getFirstComponent(SceneComponent);
+        this.entityProvider.getComponents(PlanetComponent).forEach((p) => {
+            s.scene.add(p.tGroup);
         });
-
         this.inited = true;
     }
     onUpdate(loopInfo: ILoopInfo) {
         if (!this.inited) return;
 
-        this.entityProvider.getEntitiesWithComponents(PlanetComponent).forEach((pe) => {
-            const pc = pe.get(PlanetComponent);
-            pc.tGroup.rotation.x += 0.001;
-            pc.tGroup.rotation.y += 0.001;
+        this.entityProvider.getComponents(PlanetComponent).forEach((p) => {
+            p.tGroup.rotation.x += 0.001;
+            p.tGroup.rotation.y += 0.001;
         });
     }
 }

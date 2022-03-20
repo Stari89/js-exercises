@@ -11,14 +11,10 @@ export default class MeshSystem implements OnSceneInited {
     constructor(private entityProvider: EntityProvider) {}
 
     onSceneInited() {
-        this.entityProvider.getEntitiesWithComponents(MeshComponent).forEach((me) => {
-            const mc = me.get(MeshComponent);
-            this.entityProvider.getEntitiesWithComponents(SceneComponent).forEach((se) => {
-                const sc = se.get(SceneComponent);
-                sc.scene.add(mc.mesh);
-            });
+        const s = this.entityProvider.getFirstComponent(SceneComponent);
+        this.entityProvider.getComponents(MeshComponent).forEach((m) => {
+            s.scene.add(m.mesh);
         });
-
         this.inited = true;
     }
 }

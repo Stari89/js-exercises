@@ -29,28 +29,27 @@ export default class CameraSystem implements OnSceneInited, OnRender, OnViewResi
 
     onRender(loopInfo: ILoopInfo) {
         if (!this.inited) return;
-        this.entityProvider.getEntitiesWithComponents(SceneComponent, CameraComponent).forEach((e) => {
-            const s = e.get(SceneComponent);
-            const c = e.get(CameraComponent);
-            this.viewportProvider.Renderer.render(s.scene, c.camera);
-        });
+
+        const c = this.entityProvider.getFirstComponent(CameraComponent);
+        const s = this.entityProvider.getFirstComponent(SceneComponent);
+        this.viewportProvider.Renderer.render(s.scene, c.camera);
     }
     onViewResize() {
         if (!this.inited) return;
-        this.entityProvider.getEntitiesWithComponents(SceneComponent, CameraComponent).forEach((e) => {
-            const c = e.get(CameraComponent);
-            if (c.camera instanceof PerspectiveCamera) {
-                c.camera.aspect = this.viewportProvider.Aspect;
-                c.camera.updateProjectionMatrix();
-            }
-            if (c.camera instanceof OrthographicCamera) {
-                const bounds = this.getViewBounds();
-                c.camera.left = -bounds.x;
-                c.camera.right = bounds.x;
-                c.camera.top = bounds.y;
-                c.camera.bottom = -bounds.y;
-                c.camera.updateProjectionMatrix();
-            }
-        });
+
+        const c = this.entityProvider.getFirstComponent(CameraComponent);
+
+        if (c.camera instanceof PerspectiveCamera) {
+            c.camera.aspect = this.viewportProvider.Aspect;
+            c.camera.updateProjectionMatrix();
+        }
+        if (c.camera instanceof OrthographicCamera) {
+            const bounds = this.getViewBounds();
+            c.camera.left = -bounds.x;
+            c.camera.right = bounds.x;
+            c.camera.top = bounds.y;
+            c.camera.bottom = -bounds.y;
+            c.camera.updateProjectionMatrix();
+        }
     }
 }
