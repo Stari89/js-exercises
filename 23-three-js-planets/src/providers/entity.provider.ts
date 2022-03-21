@@ -29,12 +29,20 @@ export default class EntityProvider implements OnSceneInited {
         return this.entities.filter((e) => e.has(...componentClasses));
     }
 
-    getComponents<T extends IBaseComponent>(componentClass: IBaseComponentType<T>): T[] {
-        return this.getEntitiesWithComponents(componentClass).map((e) => e.get(componentClass));
+    getComponents<T extends IBaseComponent>(
+        componentClass: IBaseComponentType<T>,
+        filter?: IBaseComponentType<IBaseComponent>[]
+    ): T[] {
+        const componentClasses = filter || [];
+        componentClasses.push(componentClass);
+        return this.getEntitiesWithComponents(...componentClasses).map((e) => e.get(componentClass));
     }
 
-    getFirstComponent<T extends IBaseComponent>(componentClass: IBaseComponentType<T>): T {
-        const components = this.getComponents(componentClass);
+    getFirstComponent<T extends IBaseComponent>(
+        componentClass: IBaseComponentType<T>,
+        filter?: IBaseComponentType<IBaseComponent>[]
+    ): T {
+        const components = this.getComponents(componentClass, filter);
         if (components.length === 0) {
             throw new Error('No entity with ' + componentClass.name);
         }

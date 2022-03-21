@@ -14,6 +14,7 @@ import CameraSystem from '../systems/camera.system';
 import LightComponent from '../components/light.component';
 import LightSystem from '../systems/light.system';
 import PlanetSystem from '../systems/planet.system';
+import MeshSystem from '../systems/mesh.system';
 
 @Injectable()
 export default class GameScene extends BaseScene {
@@ -25,6 +26,7 @@ export default class GameScene extends BaseScene {
         private cameraSystem: CameraSystem,
         private lightSystem: LightSystem,
         private planetSystem: PlanetSystem,
+        private meshSystem: MeshSystem,
         private invaderSystem: InvaderSystem
     ) {
         super();
@@ -44,7 +46,7 @@ export default class GameScene extends BaseScene {
         const planetEntity = await this.planetFactory.generatePlanet();
         this.entityProvider.pushNextScene(planetEntity);
 
-        for (let i = 0; i < 750; i++) {
+        for (let i = 0; i < 20; i++) {
             const iType = Math.floor(Math.random() * 4);
 
             const invaderEntity = await this.invaderFactory.generateInvader(iType);

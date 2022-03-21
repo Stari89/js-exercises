@@ -1,5 +1,5 @@
+import MeshComponent from '../components/mesh.component';
 import PlanetComponent from '../components/planet.component';
-import SceneComponent from '../components/scene.component';
 import { Injectable } from '../ioc/injector';
 import EntityProvider from '../providers/entity.provider';
 import { OnSceneInited, OnUpdate } from '../util/lifecycle';
@@ -12,18 +12,14 @@ export default class PlanetSystem implements OnSceneInited, OnUpdate {
     constructor(private entityProvider: EntityProvider) {}
 
     onSceneInited() {
-        const s = this.entityProvider.getFirstComponent(SceneComponent);
-        this.entityProvider.getComponents(PlanetComponent).forEach((p) => {
-            s.scene.add(p.tGroup);
-        });
         this.inited = true;
     }
     onUpdate(loopInfo: ILoopInfo) {
         if (!this.inited) return;
 
-        this.entityProvider.getComponents(PlanetComponent).forEach((p) => {
-            p.tGroup.rotation.x += 0.001;
-            p.tGroup.rotation.y += 0.001;
+        this.entityProvider.getComponents(MeshComponent, [PlanetComponent]).forEach((p) => {
+            p.mesh.rotation.x += 0.001;
+            p.mesh.rotation.y += 0.001;
         });
     }
 }

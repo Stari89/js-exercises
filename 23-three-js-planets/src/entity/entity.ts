@@ -1,7 +1,7 @@
-import { IBaseComponent, IBaseComponentType } from "../components/base-component";
+import { IBaseComponent, IBaseComponentType } from '../components/base-component';
 
 export default class Entity {
-    components: { [tag: string]: IBaseComponent};
+    components: { [tag: string]: IBaseComponent };
     children: Entity[];
 
     constructor() {
@@ -27,7 +27,7 @@ export default class Entity {
         if (!componentClasses || componentClasses.length === 0) {
             throw new Error(`No component classes provided!`);
         }
-        return componentClasses.every(componentClass => {
+        return componentClasses.every((componentClass) => {
             const tag = componentClass.name;
             const component = this.components[tag];
             if (!component) return false;

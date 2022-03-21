@@ -3,6 +3,7 @@ import Entity from '../entity/entity';
 import { Injectable } from '../ioc/injector';
 import sceneSrc from '../assets/planet/scene.glb';
 import PlanetComponent from '../components/planet.component';
+import MeshComponent from '../components/mesh.component';
 
 @Injectable()
 export default class PlanetFactory {
@@ -17,8 +18,9 @@ export default class PlanetFactory {
         group.scale.z = 15;
 
         const entity = new Entity();
-        const planetComponent = new PlanetComponent({ tGroup: group });
-        entity.push(planetComponent);
+        const meshComponent = new MeshComponent({ mesh: group });
+        entity.push(meshComponent);
+        entity.push(new PlanetComponent());
         return entity;
     }
 }
