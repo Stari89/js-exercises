@@ -2,11 +2,11 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import Entity from '../entity/entity';
 import { Injectable } from '../ioc/injector';
 import sceneSrc from '../assets/planet/scene.glb';
-import PlanetComponent from '../components/planet.component';
+import PlanetComponentDeprecated from '../components/planet-deprecated.component';
 import MeshComponent from '../components/mesh.component';
 
 @Injectable()
-export default class PlanetFactory {
+export default class PlanetFactoryDeprecated {
     async generatePlanet(): Promise<Entity> {
         await new Promise((resolve) => setTimeout(resolve, 1000));
 
@@ -20,7 +20,7 @@ export default class PlanetFactory {
         const entity = new Entity();
         const meshComponent = new MeshComponent({ mesh: group });
         entity.push(meshComponent);
-        entity.push(new PlanetComponent());
+        entity.push(new PlanetComponentDeprecated());
         return entity;
     }
 }

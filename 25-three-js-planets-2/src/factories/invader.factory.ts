@@ -15,7 +15,7 @@ export enum InvaderTypes {
 @Injectable()
 export default class InvaderFactory {
     async generateInvader(type: InvaderTypes): Promise<Entity> {
-        const scale = 0.015;
+        const scale = 0.005;
 
         let invaderKeyframes: number[][][];
         switch (type) {

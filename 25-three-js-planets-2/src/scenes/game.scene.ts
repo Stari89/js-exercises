@@ -2,7 +2,7 @@ import { DirectionalLight, Group, PerspectiveCamera, Scene } from 'three';
 import { Injectable } from '../ioc/injector';
 import ViewportProvider from '../providers/viewport.provider';
 import BaseScene from './base-scene';
-import PlanetFactory from '../factories/planet.factory';
+import PlanetFactoryDeprecated from '../factories/planet.factory-deprecated';
 import EntityProvider from '../providers/entity.provider';
 import InvaderFactory from '../factories/invader.factory';
 import InvaderComponent from '../components/invader.component';
@@ -13,7 +13,7 @@ import CameraComponent from '../components/camera.component';
 import CameraSystem from '../systems/camera.system';
 import LightComponent from '../components/light.component';
 import LightSystem from '../systems/light.system';
-import PlanetSystem from '../systems/planet.system';
+import PlanetSystemDeprecated from '../systems/planet.system-deprecated';
 import MeshSystem from '../systems/mesh.system';
 
 @Injectable()
@@ -21,11 +21,11 @@ export default class GameScene extends BaseScene {
     constructor(
         private viewportProvider: ViewportProvider,
         private entityProvider: EntityProvider,
-        private planetFactory: PlanetFactory,
+        private planetFactory: PlanetFactoryDeprecated,
         private invaderFactory: InvaderFactory,
         private cameraSystem: CameraSystem,
         private lightSystem: LightSystem,
-        private planetSystem: PlanetSystem,
+        private planetSystem: PlanetSystemDeprecated,
         private meshSystem: MeshSystem,
         private invaderSystem: InvaderSystem,
     ) {
@@ -46,7 +46,7 @@ export default class GameScene extends BaseScene {
         const planetEntity = await this.planetFactory.generatePlanet();
         this.entityProvider.pushNextScene(planetEntity);
 
-        for (let i = 0; i < 20; i++) {
+        for (let i = 0; i < 50; i++) {
             const iType = Math.floor(Math.random() * 4);
 
             const invaderEntity = await this.invaderFactory.generateInvader(iType);

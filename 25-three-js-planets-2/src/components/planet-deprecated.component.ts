@@ -1,6 +1,6 @@
 import { Group } from 'three';
 import { IBaseComponent } from './base-component';
 
-export default class PlanetComponent implements IBaseComponent {
+export default class PlanetComponentDeprecated implements IBaseComponent {
     constructor(options: {} = {}) {}
 }
