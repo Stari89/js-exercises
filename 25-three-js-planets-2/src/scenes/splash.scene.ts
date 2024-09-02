@@ -15,7 +15,7 @@ import GameScene from './game.scene';
 @Injectable()
 export default class SplashScene extends BaseScene {
     private readonly bounds = 0.6;
-    private readonly splashDuration = 500;
+    private readonly splashDuration = 50;
 
     constructor(
         private viewportProvider: ViewportProvider,
