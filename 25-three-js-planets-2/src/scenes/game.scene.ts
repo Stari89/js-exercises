@@ -1,8 +1,7 @@
-import { DirectionalLight, Group, OrthographicCamera, PerspectiveCamera, Scene, Vector2 } from 'three';
+import { DirectionalLight, PerspectiveCamera, Scene, Vector2 } from 'three';
 import { Injectable } from '../ioc/injector';
 import ViewportProvider from '../providers/viewport.provider';
 import BaseScene from './base-scene';
-import PlanetFactoryDeprecated from '../factories/planet.factory-deprecated';
 import EntityProvider from '../providers/entity.provider';
 import InvaderFactory from '../factories/invader.factory';
 import InvaderComponent from '../components/invader.component';
@@ -13,7 +12,6 @@ import CameraComponent from '../components/camera.component';
 import CameraSystem from '../systems/camera.system';
 import LightComponent from '../components/light.component';
 import LightSystem from '../systems/light.system';
-import PlanetSystemDeprecated from '../systems/planet.system-deprecated';
 import MeshSystem from '../systems/mesh.system';
 import CelestialBodyFactory from '../factories/celestial-body.factory';
 
@@ -23,11 +21,9 @@ export default class GameScene extends BaseScene {
         private viewportProvider: ViewportProvider,
         private entityProvider: EntityProvider,
         private celestialBodyFactory: CelestialBodyFactory,
-        private planetFactory: PlanetFactoryDeprecated,
         private invaderFactory: InvaderFactory,
         private cameraSystem: CameraSystem,
         private lightSystem: LightSystem,
-        private planetSystem: PlanetSystemDeprecated,
         private meshSystem: MeshSystem,
         private invaderSystem: InvaderSystem,
     ) {
@@ -44,9 +40,6 @@ export default class GameScene extends BaseScene {
         cameraComponent.camera.position.z = 5;
         sceneEntity.push(cameraComponent);
         this.entityProvider.pushNextScene(sceneEntity);
-
-        // const planetEntity = await this.planetFactory.generatePlanet();
-        // this.entityProvider.pushNextScene(planetEntity);
 
         const sunEntity = this.celestialBodyFactory.generateCelestialBody(
             new Vector2(0, 0),
