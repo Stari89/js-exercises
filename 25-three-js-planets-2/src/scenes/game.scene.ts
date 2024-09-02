@@ -27,7 +27,7 @@ export default class GameScene extends BaseScene {
         private lightSystem: LightSystem,
         private planetSystem: PlanetSystem,
         private meshSystem: MeshSystem,
-        private invaderSystem: InvaderSystem
+        private invaderSystem: InvaderSystem,
     ) {
         super();
     }

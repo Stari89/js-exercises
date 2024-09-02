@@ -31,7 +31,7 @@ export default class EntityProvider implements OnSceneInited {
 
     getComponents<T extends IBaseComponent>(
         componentClass: IBaseComponentType<T>,
-        filter?: IBaseComponentType<IBaseComponent>[]
+        filter?: IBaseComponentType<IBaseComponent>[],
     ): T[] {
         const componentClasses = filter || [];
         componentClasses.push(componentClass);
@@ -40,7 +40,7 @@ export default class EntityProvider implements OnSceneInited {
 
     getFirstComponent<T extends IBaseComponent>(
         componentClass: IBaseComponentType<T>,
-        filter?: IBaseComponentType<IBaseComponent>[]
+        filter?: IBaseComponentType<IBaseComponent>[],
     ): T {
         const components = this.getComponents(componentClass, filter);
         if (components.length === 0) {

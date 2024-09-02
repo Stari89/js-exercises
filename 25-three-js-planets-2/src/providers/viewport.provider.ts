@@ -1,4 +1,4 @@
-import { Vector2, WebGL1Renderer } from 'three';
+import { Vector2, WebGLRenderer } from 'three';
 import { ContainerEventEmitter } from '../ioc/event-delegator';
 import { Injectable } from '../ioc/injector';
 import { LifecycleEvents, OnUpdate } from '../util/lifecycle';
@@ -6,7 +6,7 @@ import { LifecycleEvents, OnUpdate } from '../util/lifecycle';
 @Injectable()
 export default class ViewportProvider extends ContainerEventEmitter implements OnUpdate {
     private root: HTMLElement;
-    private renderer: WebGL1Renderer;
+    private renderer: WebGLRenderer;
 
     private renderSize: Vector2;
     private viewSize: Vector2;
@@ -32,7 +32,7 @@ export default class ViewportProvider extends ContainerEventEmitter implements O
         super();
 
         this.root = document.body;
-        this.renderer = new WebGL1Renderer({ antialias: true });
+        this.renderer = new WebGLRenderer({ antialias: true });
         this.setDimensions();
         this.root.appendChild(this.renderer.domElement);
     }

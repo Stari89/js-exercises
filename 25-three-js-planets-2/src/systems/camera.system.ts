@@ -12,7 +12,10 @@ export default class CameraSystem implements OnSceneInited, OnRender, OnViewResi
     private inited = false;
     private readonly orthographicBounds = 0.6;
 
-    constructor(private viewportProvider: ViewportProvider, private entityProvider: EntityProvider) {}
+    constructor(
+        private viewportProvider: ViewportProvider,
+        private entityProvider: EntityProvider,
+    ) {}
 
     private getViewBounds() {
         const { Aspect: aspect } = this.viewportProvider;

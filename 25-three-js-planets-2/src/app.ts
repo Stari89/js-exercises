@@ -6,7 +6,10 @@ import SplashScene from './scenes/splash.scene';
 
 @Injectable()
 export default class App {
-    constructor(private gameLoopProvider: GameLoopProvider, private sceneProvider: SceneProvider) {
+    constructor(
+        private gameLoopProvider: GameLoopProvider,
+        private sceneProvider: SceneProvider,
+    ) {
         gameLoopProvider.run();
         sceneProvider.switchScene(SplashScene);
     }

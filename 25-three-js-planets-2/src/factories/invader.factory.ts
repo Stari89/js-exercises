@@ -53,13 +53,16 @@ export default class InvaderFactory {
                 g.translate(s[1] * scale, s[0] * -scale, 0);
                 boxGeometries.push(g);
             });
-            const geometry = BufferGeometryUtils.mergeBufferGeometries(boxGeometries);
+            const geometry = BufferGeometryUtils.mergeGeometries(boxGeometries);
             geometry.translate((-scale * (maxX + 1)) / 2, (scale * (maxY + 1)) / 2, 0);
             const mesh = new Mesh(geometry, material);
             meshList.push(mesh);
         });
 
-        const invaderComponent = new InvaderComponent({ meshList, frameSwitch: 500 });
+        const invaderComponent = new InvaderComponent({
+            meshList,
+            frameSwitch: 500,
+        });
 
         const entity = new Entity();
         entity.push(invaderComponent);

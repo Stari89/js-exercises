@@ -25,7 +25,7 @@ export default class MeshComponent implements IBaseComponent {
             mesh?: Group | Mesh<BufferGeometry, Material>;
             meshList?: Array<Group | Mesh<BufferGeometry, Material>>;
             currentMesh?: number;
-        } = {}
+        } = {},
     ) {
         this.meshList = options.meshList || [];
         if (options.mesh) {

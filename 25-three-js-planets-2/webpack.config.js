@@ -5,6 +5,9 @@ const path = require('path');
 module.exports = {
     entry: './src/index.ts',
     devtool: 'inline-source-map',
+    devServer: {
+        static: './dist',
+    },
     performance: {
         maxAssetSize: 10485760,
         maxEntrypointSize: 1048576,
@@ -30,9 +33,12 @@ module.exports = {
         filename: '[name].[contenthash].js',
         path: path.resolve(__dirname, 'dist'),
     },
+    optimization: {
+        runtimeChunk: 'single',
+    },
     plugins: [
         new HtmlWebpackPlugin({
-            title: 'Three.js Planets',
+            title: 'Three.js Planets 2',
             meta: { viewport: 'width=device-width, user-scalable=no' },
         }),
         new CleanWebpackPlugin(),

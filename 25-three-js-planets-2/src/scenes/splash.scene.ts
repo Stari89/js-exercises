@@ -23,7 +23,7 @@ export default class SplashScene extends BaseScene {
         private entityProvider: EntityProvider,
         private planeFactory: PlaneFactory,
         private cameraSystem: CameraSystem,
-        private meshSystem: MeshSystem
+        private meshSystem: MeshSystem,
     ) {
         super();
     }

@@ -17,7 +17,7 @@ export default class Entity {
         }
         if (!this.cast(component, componentClass)) {
             throw new Error(
-                `There are multiple classes with the same tag or name "${tag}".\nAdd a different property "tag" to one of them.`
+                `There are multiple classes with the same tag or name "${tag}".\nAdd a different property "tag" to one of them.`,
             );
         }
         return component;
@@ -33,7 +33,7 @@ export default class Entity {
             if (!component) return false;
             if (!this.cast(component, componentClass)) {
                 throw new Error(
-                    `There are multiple classes with the same tag or name "${tag}".\nAdd a different property "tag" to one of them.`
+                    `There are multiple classes with the same tag or name "${tag}".\nAdd a different property "tag" to one of them.`,
                 );
             }
             return true;
@@ -50,7 +50,7 @@ export default class Entity {
 
     private cast<T extends IBaseComponent>(
         component: IBaseComponent | undefined | null,
-        componentClass: IBaseComponentType<T>
+        componentClass: IBaseComponentType<T>,
     ): component is T {
         return !!(component && component instanceof componentClass);
     }
