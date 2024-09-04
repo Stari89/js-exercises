@@ -1,4 +1,4 @@
-import { DirectionalLight, PerspectiveCamera, Scene, Vector2 } from 'three';
+import { DirectionalLight, Scene, Vector2 } from 'three';
 import { Injectable } from '../ioc/injector';
 import ViewportProvider from '../providers/viewport.provider';
 import BaseScene from './base-scene';
@@ -34,10 +34,11 @@ export default class GameScene extends BaseScene {
         const sceneEntity = new Entity();
         const sceneComponent = new SceneComponent({ scene: new Scene() });
         sceneEntity.push(sceneComponent);
+
         const cameraComponent = new CameraComponent({
-            camera: new PerspectiveCamera(75, this.viewportProvider.Aspect, 0.1, 1000),
+            bounds: 5,
+            cameraType: 'orthographic',
         });
-        cameraComponent.camera.position.z = 5;
         sceneEntity.push(cameraComponent);
         this.entityProvider.pushNextScene(sceneEntity);
 

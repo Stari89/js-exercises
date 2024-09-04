@@ -8,26 +8,30 @@ import { OnRender, OnSceneInited, OnUpdate, OnViewResize } from '../util/lifecyc
 import { ILoopInfo } from '../util/loop-info';
 
 @Injectable()
-export default class CameraSystem implements OnSceneInited, OnRender, OnViewResize {
+export default class CameraSystem implements OnSceneInited, OnRender, OnViewResize, OnUpdate {
     private inited = false;
-    private readonly orthographicBounds = 0.6;
+    // private readonly orthographicBounds = 0.6;
 
     constructor(
         private viewportProvider: ViewportProvider,
         private entityProvider: EntityProvider,
     ) {}
 
-    private getViewBounds() {
+    getViewBounds(cameraBounds: number) {
         const { Aspect: aspect } = this.viewportProvider;
         const xAspect = aspect > 1 ? aspect : 1;
         const yAspect = aspect < 1 ? 1 / aspect : 1;
-        const xBound = this.orthographicBounds * xAspect;
-        const yBound = this.orthographicBounds * yAspect;
+        const xBound = cameraBounds * xAspect;
+        const yBound = cameraBounds * yAspect;
         return new Vector2(xBound, yBound);
     }
 
     onSceneInited() {
         this.inited = true;
+    }
+
+    onUpdate() {
+        this.onViewResize();
     }
 
     onRender(loopInfo: ILoopInfo) {
@@ -47,12 +51,14 @@ export default class CameraSystem implements OnSceneInited, OnRender, OnViewResi
             c.camera.updateProjectionMatrix();
         }
         if (c.camera instanceof OrthographicCamera) {
-            const bounds = this.getViewBounds();
+            const bounds = this.getViewBounds(c.bounds);
             c.camera.left = -bounds.x;
             c.camera.right = bounds.x;
             c.camera.top = bounds.y;
             c.camera.bottom = -bounds.y;
             c.camera.updateProjectionMatrix();
         }
+
+        c.camera.position.z = 5;
     }
 }
