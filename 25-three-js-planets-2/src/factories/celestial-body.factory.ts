@@ -7,12 +7,10 @@ import TransformComponent from '../components/transform.component';
 
 @Injectable()
 export default class CelestialBodyFactory {
-    generateCelestialBody(position: Vector2, velocity: Vector2, radius: number, color: ColorRepresentation): Entity {
-        const geometry = new SphereGeometry(radius, 64, 64);
+    generateCelestialBody(position: Vector2, velocity: Vector2, diameter: number, color: ColorRepresentation): Entity {
+        const geometry = new SphereGeometry(diameter / 4, 64, 64);
         const material = new MeshPhongMaterial({ color });
         const mesh = new Mesh(geometry, material);
-        // mesh.position.x = position.x;
-        // mesh.position.y = position.y;
         const meshComponent = new MeshComponent({ mesh });
 
         const transfrormComponent = new TransformComponent({
@@ -21,7 +19,7 @@ export default class CelestialBodyFactory {
         });
 
         const gravityComponent = new GravityComponent({
-            mass: Math.pow(radius * 1000, 3),
+            mass: Math.pow(diameter, 3),
             preUpdatedPosition: position,
             velocity,
         });

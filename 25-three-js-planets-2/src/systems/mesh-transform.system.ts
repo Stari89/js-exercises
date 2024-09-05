@@ -9,9 +9,9 @@ export default class MeshTransformSystem implements OnUpdate {
     constructor(private entityProvider: EntityProvider) {}
 
     onUpdate() {
-        this.entityProvider.getEntitiesWithComponents(MeshComponent, TransformComponent).forEach((c) => {
-            const m = c.get(MeshComponent);
-            const t = c.get(TransformComponent);
+        this.entityProvider.getEntitiesWithComponents(MeshComponent, TransformComponent).forEach((e) => {
+            const m = e.get(MeshComponent);
+            const t = e.get(TransformComponent);
 
             m.mesh.position.x = t.position.x;
             m.mesh.position.y = t.position.y;

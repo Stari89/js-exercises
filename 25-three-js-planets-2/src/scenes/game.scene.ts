@@ -15,6 +15,7 @@ import LightSystem from '../systems/light.system';
 import MeshSceneSystem from '../systems/mesh-scene.system';
 import CelestialBodyFactory from '../factories/celestial-body.factory';
 import MeshTransformSystem from '../systems/mesh-transform.system';
+import GravitySystem from '../systems/gravity.system';
 
 @Injectable()
 export default class GameScene extends BaseScene {
@@ -27,6 +28,7 @@ export default class GameScene extends BaseScene {
         private lightSystem: LightSystem,
         private meshSceneSystem: MeshSceneSystem,
         private invaderSystem: InvaderSystem,
+        private gravitySystem: GravitySystem,
         private meshTransformSystem: MeshTransformSystem,
     ) {
         super();
@@ -38,8 +40,10 @@ export default class GameScene extends BaseScene {
         sceneEntity.push(sceneComponent);
 
         const cameraComponent = new CameraComponent({
-            bounds: 5,
+            bounds: 500,
             cameraType: 'orthographic',
+            near: -10000,
+            far: 10000,
         });
         sceneEntity.push(cameraComponent);
         this.entityProvider.pushNextScene(sceneEntity);
@@ -47,18 +51,26 @@ export default class GameScene extends BaseScene {
         const sunEntity = this.celestialBodyFactory.generateCelestialBody(
             new Vector2(0, 0),
             new Vector2(0, 0),
-            1.2,
+            1200,
             0xffff00,
         );
         this.entityProvider.pushNextScene(sunEntity);
 
-        const planetEntity = this.celestialBodyFactory.generateCelestialBody(
-            new Vector2(3, 0),
-            new Vector2(0, 0),
-            0.2,
+        const planetEntity1 = this.celestialBodyFactory.generateCelestialBody(
+            new Vector2(400, 0),
+            new Vector2(0, 0.0575),
+            24,
             0x00ffff,
         );
-        this.entityProvider.pushNextScene(planetEntity);
+        this.entityProvider.pushNextScene(planetEntity1);
+
+        const planetEntity2 = this.celestialBodyFactory.generateCelestialBody(
+            new Vector2(-400, 0),
+            new Vector2(0, -0.0575),
+            24,
+            0xff00ff,
+        );
+        this.entityProvider.pushNextScene(planetEntity2);
 
         for (let i = 0; i < 50; i++) {
             const iType = Math.floor(Math.random() * 4);
