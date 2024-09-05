@@ -3,9 +3,6 @@ import { Injectable } from '../ioc/injector';
 import ViewportProvider from '../providers/viewport.provider';
 import BaseScene from './base-scene';
 import EntityProvider from '../providers/entity.provider';
-import InvaderFactory from '../factories/invader.factory';
-import InvaderComponent from '../components/invader.component';
-import InvaderSystem from '../systems/invader.system';
 import Entity from '../entity/entity';
 import SceneComponent from '../components/scene.component';
 import CameraComponent from '../components/camera.component';
@@ -23,11 +20,9 @@ export default class GameScene extends BaseScene {
         private viewportProvider: ViewportProvider,
         private entityProvider: EntityProvider,
         private celestialBodyFactory: CelestialBodyFactory,
-        private invaderFactory: InvaderFactory,
         private cameraSystem: CameraSystem,
         private lightSystem: LightSystem,
         private meshSceneSystem: MeshSceneSystem,
-        private invaderSystem: InvaderSystem,
         private gravitySystem: GravitySystem,
         private meshTransformSystem: MeshTransformSystem,
     ) {
@@ -71,24 +66,6 @@ export default class GameScene extends BaseScene {
             0xff00ff,
         );
         this.entityProvider.pushNextScene(planetEntity2);
-
-        for (let i = 0; i < 50; i++) {
-            const iType = Math.floor(Math.random() * 4);
-
-            const invaderEntity = await this.invaderFactory.generateInvader(iType);
-            const invaderComponent = invaderEntity.get(InvaderComponent);
-
-            invaderComponent.frameSwitch = 300 + Math.random() * 1000 * 2;
-            invaderComponent.rotationSpeed = Math.random() * 0.01;
-            const x = (Math.random() - 0.5) * 15;
-            const y = (Math.random() - 0.5) * 15;
-
-            invaderComponent.meshList.forEach((m) => {
-                m.position.x = x;
-                m.position.y = y;
-            });
-            this.entityProvider.pushNextScene(invaderEntity);
-        }
 
         const light = new DirectionalLight(0xffffff, 3);
         light.position.x = 1;
