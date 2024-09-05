@@ -10,7 +10,6 @@ import { ILoopInfo } from '../util/loop-info';
 @Injectable()
 export default class CameraSystem implements OnSceneInited, OnRender, OnViewResize, OnUpdate {
     private inited = false;
-    // private readonly orthographicBounds = 0.6;
 
     constructor(
         private viewportProvider: ViewportProvider,

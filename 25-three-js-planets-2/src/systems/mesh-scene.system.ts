@@ -5,7 +5,7 @@ import EntityProvider from '../providers/entity.provider';
 import { OnSceneInited } from '../util/lifecycle';
 
 @Injectable()
-export default class MeshSystem implements OnSceneInited {
+export default class MeshSceneSystem implements OnSceneInited {
     private inited = false;
 
     constructor(private entityProvider: EntityProvider) {}

@@ -12,8 +12,9 @@ import CameraComponent from '../components/camera.component';
 import CameraSystem from '../systems/camera.system';
 import LightComponent from '../components/light.component';
 import LightSystem from '../systems/light.system';
-import MeshSystem from '../systems/mesh.system';
+import MeshSceneSystem from '../systems/mesh-scene.system';
 import CelestialBodyFactory from '../factories/celestial-body.factory';
+import MeshTransformSystem from '../systems/mesh-transform.system';
 
 @Injectable()
 export default class GameScene extends BaseScene {
@@ -24,8 +25,9 @@ export default class GameScene extends BaseScene {
         private invaderFactory: InvaderFactory,
         private cameraSystem: CameraSystem,
         private lightSystem: LightSystem,
-        private meshSystem: MeshSystem,
+        private meshSceneSystem: MeshSceneSystem,
         private invaderSystem: InvaderSystem,
+        private meshTransformSystem: MeshTransformSystem,
     ) {
         super();
     }

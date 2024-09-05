@@ -9,7 +9,7 @@ import CameraComponent from '../components/camera.component';
 import PlaneFactory from '../factories/plane.factory';
 import EntityProvider from '../providers/entity.provider';
 import CameraSystem from '../systems/camera.system';
-import MeshSystem from '../systems/mesh.system';
+import MeshSceneSystem from '../systems/mesh-scene.system';
 import GameScene from './game.scene';
 
 @Injectable()
@@ -22,7 +22,7 @@ export default class SplashScene extends BaseScene {
         private entityProvider: EntityProvider,
         private planeFactory: PlaneFactory,
         private cameraSystem: CameraSystem,
-        private meshSystem: MeshSystem,
+        private meshSystem: MeshSceneSystem,
     ) {
         super();
     }

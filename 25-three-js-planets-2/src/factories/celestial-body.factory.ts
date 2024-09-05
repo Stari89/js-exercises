@@ -3,6 +3,7 @@ import MeshComponent from '../components/mesh.component';
 import Entity from '../entity/entity';
 import { Injectable } from '../ioc/injector';
 import GravityComponent from '../components/gravity.component';
+import TransformComponent from '../components/transform.component';
 
 @Injectable()
 export default class CelestialBodyFactory {
@@ -10,9 +11,14 @@ export default class CelestialBodyFactory {
         const geometry = new SphereGeometry(radius, 64, 64);
         const material = new MeshPhongMaterial({ color });
         const mesh = new Mesh(geometry, material);
-        mesh.position.x = position.x;
-        mesh.position.y = position.y;
+        // mesh.position.x = position.x;
+        // mesh.position.y = position.y;
         const meshComponent = new MeshComponent({ mesh });
+
+        const transfrormComponent = new TransformComponent({
+            position,
+            scale: new Vector2(1, 1),
+        });
 
         const gravityComponent = new GravityComponent({
             mass: Math.pow(radius * 1000, 3),
@@ -22,6 +28,7 @@ export default class CelestialBodyFactory {
 
         const entity = new Entity();
         entity.push(meshComponent);
+        entity.push(transfrormComponent);
         entity.push(gravityComponent);
         return entity;
     }
