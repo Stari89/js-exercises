@@ -1,6 +1,6 @@
 import { IBaseComponent, IBaseComponentType } from '../components/base-component';
+import { Injectable } from '../decorators/injectable';
 import Entity from '../entity/entity';
-import { Injectable } from '../ioc/injector';
 import { OnSceneInited } from '../util/lifecycle';
 
 @Injectable()

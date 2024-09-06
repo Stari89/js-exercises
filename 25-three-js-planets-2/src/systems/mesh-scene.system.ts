@@ -1,6 +1,6 @@
 import MeshComponent from '../components/mesh.component';
 import SceneComponent from '../components/scene.component';
-import { Injectable } from '../ioc/injector';
+import { Injectable } from '../decorators/injectable';
 import EntityProvider from '../providers/entity.provider';
 import { OnSceneInited } from '../util/lifecycle';
 

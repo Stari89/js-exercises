@@ -1,5 +1,4 @@
 import { Scene } from 'three';
-import { Injectable } from '../ioc/injector';
 import SceneProvider from '../providers/scene.provider';
 import ViewportProvider from '../providers/viewport.provider';
 import BaseScene from './base-scene';
@@ -11,6 +10,7 @@ import EntityProvider from '../providers/entity.provider';
 import CameraSystem from '../systems/camera.system';
 import MeshSceneSystem from '../systems/mesh-scene.system';
 import GameScene from './game.scene';
+import { Injectable } from '../decorators/injectable';
 
 @Injectable()
 export default class SplashScene extends BaseScene {

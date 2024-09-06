@@ -1,6 +1,6 @@
 import MeshComponent from '../components/mesh.component';
 import TransformComponent from '../components/transform.component';
-import { Injectable } from '../ioc/injector';
+import { Injectable } from '../decorators/injectable';
 import EntityProvider from '../providers/entity.provider';
 import { OnUpdate } from '../util/lifecycle';
 

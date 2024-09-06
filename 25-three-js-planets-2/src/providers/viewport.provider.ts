@@ -1,7 +1,7 @@
 import { Vector2, WebGLRenderer } from 'three';
 import { ContainerEventEmitter } from '../ioc/event-delegator';
-import { Injectable } from '../ioc/injector';
 import { LifecycleEvents, OnUpdate } from '../util/lifecycle';
+import { Injectable } from '../decorators/injectable';
 
 @Injectable()
 export default class ViewportProvider extends ContainerEventEmitter implements OnUpdate {

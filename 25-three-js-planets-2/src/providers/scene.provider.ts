@@ -1,9 +1,10 @@
-import { Injectable, Injector } from '../ioc/injector';
+import { Injector } from '../ioc/injector';
 import BaseScene from '../scenes/base-scene';
 import { Container } from '../ioc/container';
 import { InjectedType } from '../ioc/util';
 import { ContainerEventEmitter } from '../ioc/event-delegator';
 import { LifecycleEvents } from '../util/lifecycle';
+import { Injectable } from '../decorators/injectable';
 
 @Injectable()
 export default class SceneProvider extends ContainerEventEmitter {

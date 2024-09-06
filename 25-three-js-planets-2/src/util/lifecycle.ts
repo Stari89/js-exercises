@@ -7,6 +7,7 @@ export enum LifecycleEvents {
     OnAfterUpdate = 'onAfterUpdate',
     OnBeforeRender = 'onBeforeRender',
     OnRender = 'onRender',
+    OnAfterRender = 'onAfterRender',
     OnStop = 'onStop',
     OnViewResize = 'onViewResize',
     OnSceneInit = 'onSceneInit',
@@ -26,10 +27,13 @@ export interface OnAfterUpdate {
     onAfterUpdate: (loopInfo: ILoopInfo) => void;
 }
 export interface OnBeforeRender {
-    onRender: (loopInfo: ILoopInfo) => void;
+    onBeforeRender: (loopInfo: ILoopInfo) => void;
 }
 export interface OnRender {
     onRender: (loopInfo: ILoopInfo) => void;
+}
+export interface OnAfterRender {
+    onAfterRender: (loopInfo: ILoopInfo) => void;
 }
 export interface OnStop {
     onStop: () => void;

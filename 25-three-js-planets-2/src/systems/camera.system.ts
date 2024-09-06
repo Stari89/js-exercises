@@ -1,11 +1,11 @@
 import { OrthographicCamera, PerspectiveCamera, Vector2 } from 'three';
 import CameraComponent from '../components/camera.component';
 import SceneComponent from '../components/scene.component';
-import { Injectable } from '../ioc/injector';
 import EntityProvider from '../providers/entity.provider';
 import ViewportProvider from '../providers/viewport.provider';
 import { OnRender, OnSceneInited, OnUpdate, OnViewResize } from '../util/lifecycle';
 import { ILoopInfo } from '../util/loop-info';
+import { Injectable } from '../decorators/injectable';
 
 @Injectable()
 export default class CameraSystem implements OnSceneInited, OnRender, OnViewResize, OnUpdate {

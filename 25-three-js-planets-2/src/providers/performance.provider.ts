@@ -1,7 +1,9 @@
-import { Injectable } from '../ioc/injector';
+import { Injectable } from '../decorators/injectable';
+import { OnAfterRender, OnAfterUpdate, OnBeforeRender, OnBeforeUpdate } from '../util/lifecycle';
+import { ILoopInfo } from '../util/loop-info';
 
 @Injectable()
-export default class PerformanceProvider {
+export default class PerformanceProvider implements OnBeforeUpdate, OnAfterUpdate, OnBeforeRender, OnAfterRender {
     private updateLoopCount = 0;
     private renderLoopCount = 0;
 
@@ -32,20 +34,18 @@ export default class PerformanceProvider {
         this.performanceBox.style.padding = '5px';
         this.performanceBox.style.display = 'flex';
         this.performanceBox.style.flexDirection = 'column';
-
         this.performanceBox.appendChild(this.updateCountSpan);
         this.performanceBox.appendChild(this.updateTimeSpan);
         this.performanceBox.appendChild(this.renderCountSpan);
         this.performanceBox.appendChild(this.renderTimeSpan);
-
         document.body.appendChild(this.performanceBox);
     }
 
-    public startUpdate() {
+    public onBeforeUpdate(loopInfo: ILoopInfo) {
         this.updateLoopTime = performance.now();
     }
 
-    public stopUpdate() {
+    public onAfterUpdate(loopInfo: ILoopInfo) {
         this.updateLoopCount++;
         const dt = performance.now() - this.updateLoopTime;
 
@@ -60,11 +60,11 @@ export default class PerformanceProvider {
         }
     }
 
-    public startRender() {
+    public onBeforeRender() {
         this.renderLoopTime = performance.now();
     }
 
-    public stopRender() {
+    public onAfterRender() {
         this.renderLoopCount++;
         const dt = performance.now() - this.renderLoopTime;
 

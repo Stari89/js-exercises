@@ -1,10 +1,10 @@
 import { Vector2 } from 'three';
 import GravityComponent from '../components/gravity.component';
 import TransformComponent from '../components/transform.component';
-import { Injectable } from '../ioc/injector';
 import EntityProvider from '../providers/entity.provider';
 import { OnBeforeUpdate, OnUpdate } from '../util/lifecycle';
 import { ILoopInfo } from '../util/loop-info';
+import { Injectable } from '../decorators/injectable';
 
 @Injectable()
 export default class GravitySystem implements OnBeforeUpdate, OnUpdate {

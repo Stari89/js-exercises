@@ -20,9 +20,3 @@ export class Injector {
         return Container.instance.getClassInstance(target, injections);
     }
 }
-
-export const Injectable = (): ((target: InjectedType<any>) => void) => {
-    return (target: InjectedType<any>) => {
-        target.prototype.isInjectedService = true;
-    };
-};

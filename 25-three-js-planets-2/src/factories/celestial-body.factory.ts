@@ -1,9 +1,9 @@
 import { ColorRepresentation, Mesh, MeshPhongMaterial, SphereGeometry, Vector2, Vector3 } from 'three';
 import MeshComponent from '../components/mesh.component';
 import Entity from '../entity/entity';
-import { Injectable } from '../ioc/injector';
 import GravityComponent from '../components/gravity.component';
 import TransformComponent from '../components/transform.component';
+import { Injectable } from '../decorators/injectable';
 
 @Injectable()
 export default class CelestialBodyFactory {

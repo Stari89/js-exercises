@@ -1,8 +1,7 @@
-import { Injectable } from '../ioc/injector';
+import { Injectable } from '../decorators/injectable';
 import { ContainerEventEmitter } from '../ioc/event-delegator';
 import { LifecycleEvents } from '../util/lifecycle';
 import { ILoopInfo } from '../util/loop-info';
-import PerformanceProvider from './performance.provider';
 
 @Injectable()
 export default class GameLoopProvider extends ContainerEventEmitter {
@@ -13,12 +12,10 @@ export default class GameLoopProvider extends ContainerEventEmitter {
     private renderedLatestUpdate = true;
     private updateInProgress = false;
 
-    constructor(private performanceProvider: PerformanceProvider) {
+    constructor() {
         super();
 
-        this.loop = this.loop.bind(this);
         this.update = this.update.bind(this);
-        this.afterUpdate = this.afterUpdate.bind(this);
         this.render = this.render.bind(this);
 
         this.loopInfo = {
@@ -29,7 +26,7 @@ export default class GameLoopProvider extends ContainerEventEmitter {
 
     public run(): void {
         this.emit(LifecycleEvents.OnRun);
-        setInterval(this.loop, this.updateTick);
+        setInterval(this.update, this.updateTick);
         requestAnimationFrame(this.render);
     }
 
@@ -38,32 +35,18 @@ export default class GameLoopProvider extends ContainerEventEmitter {
         this.emit(LifecycleEvents.OnStop);
     }
 
-    private loop(): void {
+    private update(): void {
         if (this.breakLoop || this.updateInProgress) {
             return;
         }
         let t = performance.now();
-        this.performanceProvider.startUpdate();
         this.updateInProgress = true;
         this.loopInfo.dt = t - this.loopInfo.t;
         this.loopInfo.t = t;
-        this.beforeUpdate();
-        this.update();
-        this.afterUpdate();
-        this.performanceProvider.stopUpdate();
+        this.emit(LifecycleEvents.OnBeforeUpdate, this.loopInfo);
+        this.emit(LifecycleEvents.OnUpdate, this.loopInfo);
         this.updateInProgress = false;
         this.renderedLatestUpdate = false;
-    }
-
-    private beforeUpdate(): void {
-        this.emit(LifecycleEvents.OnBeforeUpdate, this.loopInfo);
-    }
-
-    private update(): void {
-        this.emit(LifecycleEvents.OnUpdate, this.loopInfo);
-    }
-
-    private afterUpdate(): void {
         this.emit(LifecycleEvents.OnAfterUpdate, this.loopInfo);
     }
 
@@ -72,10 +55,10 @@ export default class GameLoopProvider extends ContainerEventEmitter {
             requestAnimationFrame(this.render);
             return;
         }
-        this.performanceProvider.startRender();
+        this.emit(LifecycleEvents.OnBeforeRender, this.loopInfo);
         this.emit(LifecycleEvents.OnRender, this.loopInfo);
         this.renderedLatestUpdate = true;
-        this.performanceProvider.stopRender();
+        this.emit(LifecycleEvents.OnAfterRender, this.loopInfo);
         requestAnimationFrame(this.render);
     }
 }

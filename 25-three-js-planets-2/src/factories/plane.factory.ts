@@ -1,8 +1,8 @@
 import { DoubleSide, Mesh, MeshBasicMaterial, PlaneGeometry, TextureLoader } from 'three';
 import Entity from '../entity/entity';
-import { Injectable } from '../ioc/injector';
 import splashSrc from '../assets/splash.jpg';
 import MeshComponent from '../components/mesh.component';
+import { Injectable } from '../decorators/injectable';
 
 @Injectable()
 export default class PlaneFactory {

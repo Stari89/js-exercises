@@ -1,5 +1,4 @@
 import { DirectionalLight, Scene, Vector2 } from 'three';
-import { Injectable } from '../ioc/injector';
 import ViewportProvider from '../providers/viewport.provider';
 import BaseScene from './base-scene';
 import EntityProvider from '../providers/entity.provider';
@@ -13,6 +12,7 @@ import MeshSceneSystem from '../systems/mesh-scene.system';
 import CelestialBodyFactory from '../factories/celestial-body.factory';
 import MeshTransformSystem from '../systems/mesh-transform.system';
 import GravitySystem from '../systems/gravity.system';
+import { Injectable } from '../decorators/injectable';
 
 @Injectable()
 export default class GameScene extends BaseScene {
