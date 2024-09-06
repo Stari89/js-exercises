@@ -1,5 +1,4 @@
 import { Injectable } from '../ioc/injector';
-import { OnRun, OnUpdate } from '../util/lifecycle';
 
 @Injectable()
 export default class PerformanceProvider {
@@ -20,6 +19,9 @@ export default class PerformanceProvider {
     private renderTimeSpan = document.createElement('span');
 
     private performanceBox = document.createElement('div');
+
+    private readonly warnTime = 10; // ms
+    private readonly stutterTime = 20; // ms
 
     constructor() {
         this.performanceBox.style.position = 'absolute';
@@ -45,10 +47,17 @@ export default class PerformanceProvider {
 
     public stopUpdate() {
         this.updateLoopCount++;
-        const time = performance.now() - this.updateLoopTime;
+        const dt = performance.now() - this.updateLoopTime;
 
         this.updateCountSpan.innerHTML = this.updateCountText.replace('{x}', this.updateLoopCount.toString());
-        this.updateTimeSpan.innerHTML = this.updateTimeText.replace('{x}', time.toString());
+        this.updateTimeSpan.innerHTML = this.updateTimeText.replace('{x}', dt.toString());
+        if (dt < this.warnTime) {
+            this.updateTimeSpan.style.color = 'inherit';
+        } else if (dt < this.stutterTime) {
+            this.updateTimeSpan.style.color = 'orange';
+        } else {
+            this.updateTimeSpan.style.color = 'red';
+        }
     }
 
     public startRender() {
@@ -57,9 +66,17 @@ export default class PerformanceProvider {
 
     public stopRender() {
         this.renderLoopCount++;
-        const time = performance.now() - this.renderLoopTime;
+        const dt = performance.now() - this.renderLoopTime;
 
         this.renderCountSpan.innerHTML = this.renderCountText.replace('{x}', this.renderLoopCount.toString());
-        this.renderTimeSpan.innerHTML = this.renderTimeText.replace('{x}', time.toString());
+        this.renderTimeSpan.innerHTML = this.renderTimeText.replace('{x}', dt.toString());
+
+        if (dt < this.warnTime) {
+            this.renderTimeSpan.style.color = 'inherit';
+        } else if (dt < this.stutterTime) {
+            this.renderTimeSpan.style.color = 'orange';
+        } else {
+            this.renderTimeSpan.style.color = 'red';
+        }
     }
 }

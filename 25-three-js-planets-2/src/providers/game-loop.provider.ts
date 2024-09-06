@@ -6,8 +6,12 @@ import PerformanceProvider from './performance.provider';
 
 @Injectable()
 export default class GameLoopProvider extends ContainerEventEmitter {
+    private readonly updateTick = 5; // ms
     private loopInfo: ILoopInfo;
     private breakLoop: boolean;
+
+    private renderedLatestUpdate = true;
+    private updateInProgress = false;
 
     constructor(private performanceProvider: PerformanceProvider) {
         super();
@@ -25,7 +29,8 @@ export default class GameLoopProvider extends ContainerEventEmitter {
 
     public run(): void {
         this.emit(LifecycleEvents.OnRun);
-        this.loop(performance.now());
+        setInterval(this.loop, this.updateTick);
+        requestAnimationFrame(this.render);
     }
 
     public stop(): void {
@@ -33,21 +38,21 @@ export default class GameLoopProvider extends ContainerEventEmitter {
         this.emit(LifecycleEvents.OnStop);
     }
 
-    private loop(t: number): void {
-        if (this.breakLoop) {
+    private loop(): void {
+        if (this.breakLoop || this.updateInProgress) {
             return;
         }
+        let t = performance.now();
         this.performanceProvider.startUpdate();
+        this.updateInProgress = true;
         this.loopInfo.dt = t - this.loopInfo.t;
         this.loopInfo.t = t;
         this.beforeUpdate();
         this.update();
         this.afterUpdate();
         this.performanceProvider.stopUpdate();
-        this.performanceProvider.startRender();
-        this.render();
-        this.performanceProvider.stopRender();
-        requestAnimationFrame(this.loop);
+        this.updateInProgress = false;
+        this.renderedLatestUpdate = false;
     }
 
     private beforeUpdate(): void {
@@ -63,6 +68,14 @@ export default class GameLoopProvider extends ContainerEventEmitter {
     }
 
     private render(): void {
+        if (this.renderedLatestUpdate) {
+            requestAnimationFrame(this.render);
+            return;
+        }
+        this.performanceProvider.startRender();
         this.emit(LifecycleEvents.OnRender, this.loopInfo);
+        this.renderedLatestUpdate = true;
+        this.performanceProvider.stopRender();
+        requestAnimationFrame(this.render);
     }
 }
