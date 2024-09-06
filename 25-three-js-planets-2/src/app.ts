@@ -1,7 +1,6 @@
 import { Injectable } from './ioc/injector';
 import GameLoopProvider from './providers/game-loop.provider';
 import SceneProvider from './providers/scene.provider';
-import GameScene from './scenes/game.scene';
 import SplashScene from './scenes/splash.scene';
 
 @Injectable()

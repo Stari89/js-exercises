@@ -67,6 +67,16 @@ export default class GameScene extends BaseScene {
         );
         this.entityProvider.pushNextScene(planetEntity2);
 
+        for (let i = 0; i < 500; i++) {
+            const peble = this.celestialBodyFactory.generateCelestialBody(
+                new Vector2(Math.random() * 1000 - 500, Math.random() * 1000 - 500),
+                new Vector2(Math.random() * 0.1 - 0.05, Math.random() * 0.1 - 0.05),
+                Math.random() * 100,
+                Math.random() * 0xffffff,
+            );
+            this.entityProvider.pushNextScene(peble);
+        }
+
         const light = new DirectionalLight(0xffffff, 3);
         light.position.x = 1;
         light.position.y = 1;

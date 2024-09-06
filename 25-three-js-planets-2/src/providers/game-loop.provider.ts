@@ -2,13 +2,14 @@ import { Injectable } from '../ioc/injector';
 import { ContainerEventEmitter } from '../ioc/event-delegator';
 import { LifecycleEvents } from '../util/lifecycle';
 import { ILoopInfo } from '../util/loop-info';
+import PerformanceProvider from './performance.provider';
 
 @Injectable()
 export default class GameLoopProvider extends ContainerEventEmitter {
     private loopInfo: ILoopInfo;
     private breakLoop: boolean;
 
-    constructor() {
+    constructor(private performanceProvider: PerformanceProvider) {
         super();
 
         this.loop = this.loop.bind(this);
@@ -36,12 +37,16 @@ export default class GameLoopProvider extends ContainerEventEmitter {
         if (this.breakLoop) {
             return;
         }
+        this.performanceProvider.startUpdate();
         this.loopInfo.dt = t - this.loopInfo.t;
         this.loopInfo.t = t;
         this.beforeUpdate();
         this.update();
         this.afterUpdate();
+        this.performanceProvider.stopUpdate();
+        this.performanceProvider.startRender();
         this.render();
+        this.performanceProvider.stopRender();
         requestAnimationFrame(this.loop);
     }
 
