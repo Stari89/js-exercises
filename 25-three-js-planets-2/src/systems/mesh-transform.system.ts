@@ -1,15 +1,20 @@
 import MeshComponent from '../components/mesh.component';
 import TransformComponent from '../components/transform.component';
 import { Injectable } from '../decorators/injectable';
-import EntityProvider from '../providers/entity.provider';
 import { OnUpdate } from '../util/lifecycle';
+import { ILoopInfo } from '../util/loop-info';
+import BaseSystem from './base-system';
 
 @Injectable()
-export default class MeshTransformSystem implements OnUpdate {
-    constructor(private entityProvider: EntityProvider) {}
+export default class MeshTransformSystem extends BaseSystem implements OnUpdate {
+    readonly componentTypes = [MeshComponent, TransformComponent];
 
-    onUpdate() {
-        this.entityProvider.getEntitiesWithComponents(MeshComponent, TransformComponent).forEach((e) => {
+    constructor() {
+        super();
+    }
+
+    onUpdate(loopInfo: ILoopInfo) {
+        this.entities.forEach((e) => {
             const m = e.get(MeshComponent);
             const t = e.get(TransformComponent);
 

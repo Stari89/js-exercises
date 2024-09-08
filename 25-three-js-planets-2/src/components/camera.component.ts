@@ -2,6 +2,7 @@ import { Camera, OrthographicCamera, PerspectiveCamera } from 'three';
 import { IBaseComponent } from './base-component';
 
 export default class CameraComponent implements IBaseComponent {
+    componentName = 'CameraComponent';
     public readonly camera: Camera;
     public bounds: number; // for orthographic camera
     public near: number;

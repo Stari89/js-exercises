@@ -1,20 +1,20 @@
 import { OrthographicCamera, PerspectiveCamera, Vector2 } from 'three';
 import CameraComponent from '../components/camera.component';
 import SceneComponent from '../components/scene.component';
-import EntityProvider from '../providers/entity.provider';
 import ViewportProvider from '../providers/viewport.provider';
 import { OnRender, OnSceneInited, OnUpdate, OnViewResize } from '../util/lifecycle';
 import { ILoopInfo } from '../util/loop-info';
 import { Injectable } from '../decorators/injectable';
+import BaseSystem from './base-system';
 
 @Injectable()
-export default class CameraSystem implements OnSceneInited, OnRender, OnViewResize, OnUpdate {
+export default class CameraSystem extends BaseSystem implements OnSceneInited, OnRender, OnViewResize, OnUpdate {
     private inited = false;
+    readonly componentTypes = [CameraComponent, SceneComponent];
 
-    constructor(
-        private viewportProvider: ViewportProvider,
-        private entityProvider: EntityProvider,
-    ) {}
+    constructor(private viewportProvider: ViewportProvider) {
+        super();
+    }
 
     getViewBounds(cameraBounds: number) {
         const { Aspect: aspect } = this.viewportProvider;
@@ -34,16 +34,16 @@ export default class CameraSystem implements OnSceneInited, OnRender, OnViewResi
     }
 
     onRender(loopInfo: ILoopInfo) {
-        if (!this.inited) return;
+        if (!this.inited || this.entities.length == 0) return;
 
-        const c = this.entityProvider.getFirstComponent(CameraComponent);
-        const s = this.entityProvider.getFirstComponent(SceneComponent);
+        const c = this.entities[0].get(CameraComponent);
+        const s = this.entities[0].get(SceneComponent);
         this.viewportProvider.Renderer.render(s.scene, c.camera);
     }
     onViewResize() {
         if (!this.inited) return;
 
-        const c = this.entityProvider.getFirstComponent(CameraComponent);
+        const c = this.entities[0].get(CameraComponent);
 
         if (c.camera instanceof PerspectiveCamera) {
             c.camera.aspect = this.viewportProvider.Aspect;

@@ -23,7 +23,7 @@ export default class Entity {
         return component;
     }
 
-    public has(...componentClasses: IBaseComponentType<IBaseComponent>[]): boolean {
+    public has<T extends IBaseComponent>(...componentClasses: IBaseComponentType<T>[]): boolean {
         if (!componentClasses || componentClasses.length === 0) {
             throw new Error(`No component classes provided!`);
         }

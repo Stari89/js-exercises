@@ -2,6 +2,7 @@ import { Vector2 } from 'three';
 import { IBaseComponent } from './base-component';
 
 export default class GravityComponent implements IBaseComponent {
+    componentName = 'GravityComponent';
     public preUpdatedPosition: Vector2;
     public velocity: Vector2;
     public mass: number;

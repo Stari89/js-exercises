@@ -2,6 +2,7 @@ import { BufferGeometry, Group, Material, Mesh } from 'three';
 import { IBaseComponent } from './base-component';
 
 export default class MeshComponent implements IBaseComponent {
+    componentName = 'MeshComponent';
     private _currentMeshIndex: number;
     public meshList: Array<Mesh<BufferGeometry, Material> | Group>;
 

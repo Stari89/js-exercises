@@ -2,6 +2,7 @@ import { Vector2 } from 'three';
 import { IBaseComponent } from './base-component';
 
 export default class TransformComponent implements IBaseComponent {
+    componentName = 'TransformComponent';
     public position: Vector2;
     public scale: Vector2;
     public rotation: number;

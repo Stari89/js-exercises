@@ -2,27 +2,34 @@ import { IBaseComponent, IBaseComponentType } from '../components/base-component
 import { Injectable } from '../decorators/injectable';
 import Entity from '../entity/entity';
 import { OnSceneInited } from '../util/lifecycle';
+import SystemsProvider from './systems.provider';
 
 @Injectable()
 export default class EntityProvider implements OnSceneInited {
-    private entities: Array<Entity> = [];
+    public entities: Array<Entity> = [];
     private nextSceneEntities: Array<Entity> = [];
+
+    constructor(private systemsProvider: SystemsProvider) {}
 
     push(entity: Entity) {
         this.entities.push(entity);
+        this.systemsProvider.pushEntity(entity);
     }
 
     pushNextScene(entity: Entity) {
         this.nextSceneEntities.push(entity);
+        this.systemsProvider.pushEntityNextScene(entity);
     }
 
     switchToNextScene() {
         this.entities = [...this.nextSceneEntities];
         this.nextSceneEntities = [];
+        this.systemsProvider.switchToNextScene();
     }
 
     clear() {
         this.entities = [];
+        this.systemsProvider.clearEntities();
     }
 
     getEntitiesWithComponents(...componentClasses: IBaseComponentType<IBaseComponent>[]): Array<Entity> {
