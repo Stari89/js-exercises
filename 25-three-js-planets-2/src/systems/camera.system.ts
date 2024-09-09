@@ -5,16 +5,16 @@ import ViewportProvider from '../providers/viewport.provider';
 import { OnRender, OnSceneInited, OnUpdate, OnViewResize } from '../util/lifecycle';
 import { ILoopInfo } from '../util/loop-info';
 import { Injectable } from '../decorators/injectable';
-import BaseSystem from './base-system';
+import EntityProvider from '../providers/entity.provider';
 
 @Injectable()
-export default class CameraSystem extends BaseSystem implements OnSceneInited, OnRender, OnViewResize, OnUpdate {
+export default class CameraSystem implements OnSceneInited, OnRender, OnViewResize, OnUpdate {
     private inited = false;
-    readonly componentTypes = [CameraComponent, SceneComponent];
 
-    constructor(private viewportProvider: ViewportProvider) {
-        super();
-    }
+    constructor(
+        private viewportProvider: ViewportProvider,
+        private entityProvider: EntityProvider,
+    ) {}
 
     getViewBounds(cameraBounds: number) {
         const { Aspect: aspect } = this.viewportProvider;
@@ -34,16 +34,25 @@ export default class CameraSystem extends BaseSystem implements OnSceneInited, O
     }
 
     onRender(loopInfo: ILoopInfo) {
-        if (!this.inited || this.entities.length == 0) return;
+        if (!this.inited) return;
 
-        const c = this.entities[0].get(CameraComponent);
-        const s = this.entities[0].get(SceneComponent);
+        const entities = this.entityProvider.getEntitiesWithComponents(CameraComponent, SceneComponent);
+        if (entities.length == 0) {
+            return;
+        }
+
+        const c = entities[0].get(CameraComponent);
+        const s = entities[0].get(SceneComponent);
         this.viewportProvider.Renderer.render(s.scene, c.camera);
     }
     onViewResize() {
         if (!this.inited) return;
 
-        const c = this.entities[0].get(CameraComponent);
+        const entities = this.entityProvider.getEntitiesWithComponents(CameraComponent, SceneComponent);
+        if (entities.length == 0) {
+            return;
+        }
+        const c = entities[0].get(CameraComponent);
 
         if (c.camera instanceof PerspectiveCamera) {
             c.camera.aspect = this.viewportProvider.Aspect;

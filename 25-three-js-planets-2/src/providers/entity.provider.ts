@@ -2,37 +2,37 @@ import { IBaseComponent, IBaseComponentType } from '../components/base-component
 import { Injectable } from '../decorators/injectable';
 import Entity from '../entity/entity';
 import { OnSceneInited } from '../util/lifecycle';
-import SystemsProvider from './systems.provider';
 
 @Injectable()
 export default class EntityProvider implements OnSceneInited {
     public entities: Array<Entity> = [];
     private nextSceneEntities: Array<Entity> = [];
 
-    constructor(private systemsProvider: SystemsProvider) {}
+    public filteredEntities: Record<string, Array<Entity>> = {};
 
     push(entity: Entity) {
         this.entities.push(entity);
-        this.systemsProvider.pushEntity(entity);
     }
 
     pushNextScene(entity: Entity) {
         this.nextSceneEntities.push(entity);
-        this.systemsProvider.pushEntityNextScene(entity);
     }
 
     switchToNextScene() {
         this.entities = [...this.nextSceneEntities];
         this.nextSceneEntities = [];
-        this.systemsProvider.switchToNextScene();
     }
 
     clear() {
         this.entities = [];
-        this.systemsProvider.clearEntities();
+        this.filteredEntities = {};
     }
 
     getEntitiesWithComponents(...componentClasses: IBaseComponentType<IBaseComponent>[]): Array<Entity> {
+        const componentFilterName = this.getComponentFilterName(...componentClasses);
+        if (!this.filteredEntities[componentFilterName]) {
+            this.filteredEntities[componentFilterName] = this.entities.filter((e) => e.has(...componentClasses));
+        }
         return this.entities.filter((e) => e.has(...componentClasses));
     }
 
@@ -58,5 +58,12 @@ export default class EntityProvider implements OnSceneInited {
 
     onSceneInited() {
         this.switchToNextScene();
+    }
+
+    private getComponentFilterName(...componentClasses: IBaseComponentType<IBaseComponent>[]): string {
+        return [...componentClasses]
+            .map((c) => c.name)
+            .sort()
+            .join();
     }
 }

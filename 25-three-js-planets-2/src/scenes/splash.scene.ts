@@ -10,7 +10,6 @@ import CameraSystem from '../systems/camera.system';
 import MeshSceneSystem from '../systems/mesh-scene.system';
 import GameScene from './game.scene';
 import { Injectable } from '../decorators/injectable';
-import SystemsProvider from '../providers/systems.provider';
 
 @Injectable()
 export default class SplashScene extends BaseScene {
@@ -22,17 +21,11 @@ export default class SplashScene extends BaseScene {
         private planeFactory: PlaneFactory,
         private cameraSystem: CameraSystem,
         private meshSystem: MeshSceneSystem,
-        private systemsProvider: SystemsProvider,
     ) {
         super();
     }
 
     async init() {
-        // Systems
-        this.systemsProvider.pushSystem(this.cameraSystem);
-        this.systemsProvider.pushSystem(this.meshSystem);
-
-        // Entities
         const sceneEntity = new Entity();
         const sceneComponent = new SceneComponent({ scene: new Scene() });
         const cameraComponent = new CameraComponent({ cameraType: 'orthographic', bounds: 0.6 });

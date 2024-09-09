@@ -13,7 +13,6 @@ import CelestialBodyFactory from '../factories/celestial-body.factory';
 import MeshTransformSystem from '../systems/mesh-transform.system';
 import GravitySystem from '../systems/gravity.system';
 import { Injectable } from '../decorators/injectable';
-import SystemsProvider from '../providers/systems.provider';
 
 @Injectable()
 export default class GameScene extends BaseScene {
@@ -26,20 +25,11 @@ export default class GameScene extends BaseScene {
         private meshSceneSystem: MeshSceneSystem,
         private gravitySystem: GravitySystem,
         private meshTransformSystem: MeshTransformSystem,
-        private systemsProvider: SystemsProvider,
     ) {
         super();
     }
 
     async init() {
-        // Systems
-        this.systemsProvider.pushSystem(this.cameraSystem);
-        this.systemsProvider.pushSystem(this.lightSystem);
-        this.systemsProvider.pushSystem(this.meshSceneSystem);
-        this.systemsProvider.pushSystem(this.gravitySystem);
-        this.systemsProvider.pushSystem(this.meshTransformSystem);
-
-        // Entities
         const sceneEntity = new Entity();
         const sceneComponent = new SceneComponent({ scene: new Scene() });
         sceneEntity.push(sceneComponent);
@@ -77,8 +67,8 @@ export default class GameScene extends BaseScene {
         );
         this.entityProvider.pushNextScene(planetEntity2);
 
-        // 200: ~11ms
-        // 500: ~70ms
+        // 200: ~11ms => 6ms
+        // 500: ~70ms -> ~36ms
         for (let i = 0; i < 200; i++) {
             const peble = this.celestialBodyFactory.generateCelestialBody(
                 new Vector2(Math.random() * 1000 - 500, Math.random() * 1000 - 500),
