@@ -12,7 +12,7 @@ export default class GravitySystem implements OnBeforeUpdate, OnUpdate {
 
     constructor(private entityProvider: EntityProvider) {}
 
-    public onBeforeUpdate(loopInfo: ILoopInfo) {
+    async onBeforeUpdate(loopInfo: ILoopInfo) {
         const entities = this.entityProvider.getEntitiesWithComponents(GravityComponent, TransformComponent);
         entities.forEach((e) => {
             const g = e.get(GravityComponent);
@@ -21,7 +21,7 @@ export default class GravitySystem implements OnBeforeUpdate, OnUpdate {
         });
     }
 
-    public onUpdate(loopInfo: ILoopInfo) {
+    async onUpdate(loopInfo: ILoopInfo) {
         const entities = this.entityProvider.getEntitiesWithComponents(GravityComponent, TransformComponent);
         entities.forEach((e) => {
             const g = e.get(GravityComponent);

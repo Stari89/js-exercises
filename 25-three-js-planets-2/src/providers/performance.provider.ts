@@ -41,11 +41,11 @@ export default class PerformanceProvider implements OnBeforeUpdate, OnAfterUpdat
         document.body.appendChild(this.performanceBox);
     }
 
-    public onBeforeUpdate(loopInfo: ILoopInfo) {
+    async onBeforeUpdate(loopInfo: ILoopInfo) {
         this.updateLoopTime = performance.now();
     }
 
-    public onAfterUpdate(loopInfo: ILoopInfo) {
+    async onAfterUpdate(loopInfo: ILoopInfo) {
         this.updateLoopCount++;
         const dt = performance.now() - this.updateLoopTime;
 
@@ -60,11 +60,11 @@ export default class PerformanceProvider implements OnBeforeUpdate, OnAfterUpdat
         }
     }
 
-    public onBeforeRender() {
+    async onBeforeRender() {
         this.renderLoopTime = performance.now();
     }
 
-    public onAfterRender() {
+    async onAfterRender() {
         this.renderLoopCount++;
         const dt = performance.now() - this.renderLoopTime;
 

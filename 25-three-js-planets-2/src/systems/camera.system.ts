@@ -25,15 +25,15 @@ export default class CameraSystem implements OnSceneInited, OnRender, OnViewResi
         return new Vector2(xBound, yBound);
     }
 
-    onSceneInited() {
+    async onSceneInited() {
         this.inited = true;
     }
 
-    onUpdate() {
+    async onUpdate() {
         this.onViewResize();
     }
 
-    onRender(loopInfo: ILoopInfo) {
+    async onRender(loopInfo: ILoopInfo) {
         if (!this.inited) return;
 
         const entities = this.entityProvider.getEntitiesWithComponents(CameraComponent, SceneComponent);
@@ -45,7 +45,7 @@ export default class CameraSystem implements OnSceneInited, OnRender, OnViewResi
         const s = entities[0].get(SceneComponent);
         this.viewportProvider.Renderer.render(s.scene, c.camera);
     }
-    onViewResize() {
+    async onViewResize() {
         if (!this.inited) return;
 
         const entities = this.entityProvider.getEntitiesWithComponents(CameraComponent, SceneComponent);

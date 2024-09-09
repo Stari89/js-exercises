@@ -8,7 +8,7 @@ import { OnSceneInited } from '../util/lifecycle';
 export default class LightSystem implements OnSceneInited {
     constructor(private entityProvider: EntityProvider) {}
 
-    onSceneInited() {
+    async onSceneInited() {
         const s = this.entityProvider.getFirstComponent(SceneComponent);
         const entities = this.entityProvider.getEntitiesWithComponents(LightComponent);
         entities.forEach((e) => {

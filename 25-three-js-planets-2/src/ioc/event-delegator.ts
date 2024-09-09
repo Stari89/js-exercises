@@ -19,10 +19,11 @@ export class EventDelegator {
         eventEmitter.emit = this.emit;
     }
 
-    private emit(event: LifecycleEvents, ...params: any): void {
+    private async emit(event: LifecycleEvents, ...params: any) {
         for (const value of Container.instance.values()) {
+            const asdf = typeof value[event];
             if (typeof value[event] === 'function') {
-                value[event](...params);
+                await value[event](...params);
             }
         }
     }
@@ -36,4 +37,4 @@ export class ContainerEventEmitter {
     public emit: ContainerEvent;
 }
 
-export type ContainerEvent = (event: LifecycleEvents, ...args: any) => void;
+export type ContainerEvent = (event: LifecycleEvents, ...args: any) => Promise<void>;

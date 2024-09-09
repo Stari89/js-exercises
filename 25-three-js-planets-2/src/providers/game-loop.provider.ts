@@ -24,18 +24,18 @@ export default class GameLoopProvider extends ContainerEventEmitter {
         };
     }
 
-    public run(): void {
-        this.emit(LifecycleEvents.OnRun);
+    async run() {
+        await this.emit(LifecycleEvents.OnRun);
         setInterval(this.update, this.updateTick);
         requestAnimationFrame(this.render);
     }
 
-    public stop(): void {
+    async stop() {
         this.breakLoop = true;
-        this.emit(LifecycleEvents.OnStop);
+        await this.emit(LifecycleEvents.OnStop);
     }
 
-    private update(): void {
+    private async update() {
         if (this.breakLoop || this.updateInProgress) {
             return;
         }
@@ -43,22 +43,22 @@ export default class GameLoopProvider extends ContainerEventEmitter {
         this.updateInProgress = true;
         this.loopInfo.dt = t - this.loopInfo.t;
         this.loopInfo.t = t;
-        this.emit(LifecycleEvents.OnBeforeUpdate, this.loopInfo);
-        this.emit(LifecycleEvents.OnUpdate, this.loopInfo);
+        await this.emit(LifecycleEvents.OnBeforeUpdate, this.loopInfo);
+        await this.emit(LifecycleEvents.OnUpdate, this.loopInfo);
         this.updateInProgress = false;
         this.renderedLatestUpdate = false;
-        this.emit(LifecycleEvents.OnAfterUpdate, this.loopInfo);
+        await this.emit(LifecycleEvents.OnAfterUpdate, this.loopInfo);
     }
 
-    private render(): void {
+    private async render() {
         if (this.renderedLatestUpdate) {
             requestAnimationFrame(this.render);
             return;
         }
-        this.emit(LifecycleEvents.OnBeforeRender, this.loopInfo);
-        this.emit(LifecycleEvents.OnRender, this.loopInfo);
+        await this.emit(LifecycleEvents.OnBeforeRender, this.loopInfo);
+        await this.emit(LifecycleEvents.OnRender, this.loopInfo);
         this.renderedLatestUpdate = true;
-        this.emit(LifecycleEvents.OnAfterRender, this.loopInfo);
+        await this.emit(LifecycleEvents.OnAfterRender, this.loopInfo);
         requestAnimationFrame(this.render);
     }
 }

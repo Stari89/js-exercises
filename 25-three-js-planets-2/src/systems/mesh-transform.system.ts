@@ -9,7 +9,7 @@ import { ILoopInfo } from '../util/loop-info';
 export default class MeshTransformSystem implements OnUpdate {
     constructor(private entityProvider: EntityProvider) {}
 
-    onUpdate(loopInfo: ILoopInfo) {
+    async onUpdate(loopInfo: ILoopInfo) {
         const entities = this.entityProvider.getEntitiesWithComponents(MeshComponent, TransformComponent);
         entities.forEach((e) => {
             const m = e.get(MeshComponent);

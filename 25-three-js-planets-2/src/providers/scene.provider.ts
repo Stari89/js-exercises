@@ -16,11 +16,11 @@ export default class SceneProvider extends ContainerEventEmitter {
     }
 
     async switchScene<T extends BaseScene>(target: InjectedType<T>) {
-        this.emit(LifecycleEvents.OnSceneInit);
+        await this.emit(LifecycleEvents.OnSceneInit);
         const nextScene = Injector.instance.resolve<T>(target);
         await nextScene.init();
         this.currentScene && Container.instance.dispose(this.currentScene);
         this.currentScene = target;
-        this.emit(LifecycleEvents.OnSceneInited);
+        await this.emit(LifecycleEvents.OnSceneInited);
     }
 }

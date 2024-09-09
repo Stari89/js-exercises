@@ -56,7 +56,7 @@ export default class EntityProvider implements OnSceneInited {
         return components[0];
     }
 
-    onSceneInited() {
+    async onSceneInited() {
         this.switchToNextScene();
     }
 

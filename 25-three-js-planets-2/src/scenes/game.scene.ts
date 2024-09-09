@@ -70,7 +70,7 @@ export default class GameScene extends BaseScene {
         // 200: ~11ms => ~6ms
         // 500: ~70ms => ~36ms
         // 1000: ??ms => ~137ms
-        for (let i = 0; i < 200; i++) {
+        for (let i = 0; i < 5; i++) {
             const peble = this.celestialBodyFactory.generateCelestialBody(
                 new Vector2(Math.random() * 1000 - 500, Math.random() * 1000 - 500),
                 new Vector2(Math.random() * 0.2 - 0.1, Math.random() * 0.2 - 0.1),

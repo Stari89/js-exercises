@@ -15,35 +15,35 @@ export enum LifecycleEvents {
 }
 
 export interface OnRun {
-    onRun: () => void;
+    onRun: () => Promise<void>;
 }
 export interface OnBeforeUpdate {
-    onBeforeUpdate: (loopInfo: ILoopInfo) => void;
+    onBeforeUpdate: (loopInfo: ILoopInfo) => Promise<void>;
 }
 export interface OnUpdate {
-    onUpdate: (loopInfo: ILoopInfo) => void;
+    onUpdate: (loopInfo: ILoopInfo) => Promise<void>;
 }
 export interface OnAfterUpdate {
-    onAfterUpdate: (loopInfo: ILoopInfo) => void;
+    onAfterUpdate: (loopInfo: ILoopInfo) => Promise<void>;
 }
 export interface OnBeforeRender {
-    onBeforeRender: (loopInfo: ILoopInfo) => void;
+    onBeforeRender: (loopInfo: ILoopInfo) => Promise<void>;
 }
 export interface OnRender {
-    onRender: (loopInfo: ILoopInfo) => void;
+    onRender: (loopInfo: ILoopInfo) => Promise<void>;
 }
 export interface OnAfterRender {
-    onAfterRender: (loopInfo: ILoopInfo) => void;
+    onAfterRender: (loopInfo: ILoopInfo) => Promise<void>;
 }
 export interface OnStop {
-    onStop: () => void;
+    onStop: () => Promise<void>;
 }
 export interface OnViewResize {
-    onViewResize: () => void;
+    onViewResize: () => Promise<void>;
 }
 export interface OnSceneInit {
-    onSceneInit: () => void;
+    onSceneInit: () => Promise<void>;
 }
 export interface OnSceneInited {
-    onSceneInited: () => void;
+    onSceneInited: () => Promise<void>;
 }

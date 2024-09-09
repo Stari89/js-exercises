@@ -37,22 +37,22 @@ export default class ViewportProvider extends ContainerEventEmitter implements O
         this.root.appendChild(this.renderer.domElement);
     }
 
-    onUpdate() {
+    async onUpdate() {
         if (
             this.devicePixelRatio !== this.Scale ||
             this.viewSize.x !== window.innerWidth ||
             this.viewSize.y !== window.innerHeight
         ) {
-            this.setDimensions();
+            await this.setDimensions();
         }
     }
 
-    private setDimensions() {
+    private async setDimensions() {
         this.renderSize = new Vector2(window.innerWidth * this.Scale, window.innerHeight * this.Scale);
         this.viewSize = new Vector2(window.innerWidth, window.innerHeight);
         this.devicePixelRatio = this.Scale;
 
         this.renderer.setSize(this.viewSize.x, this.viewSize.y);
-        this.emit(LifecycleEvents.OnViewResize);
+        await this.emit(LifecycleEvents.OnViewResize);
     }
 }
