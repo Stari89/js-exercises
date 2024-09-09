@@ -83,7 +83,7 @@ export default class GameScene extends BaseScene {
         const light = new DirectionalLight(0xffffff, 3);
         light.position.x = 1;
         light.position.y = 1;
-        light.position.z = 10;
+        light.position.z = 2;
 
         const lightComponent = new LightComponent({ light });
         const lightEntity = new Entity();

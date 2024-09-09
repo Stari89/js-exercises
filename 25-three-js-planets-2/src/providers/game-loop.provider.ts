@@ -19,8 +19,8 @@ export default class GameLoopProvider extends ContainerEventEmitter {
         this.render = this.render.bind(this);
 
         this.loopInfo = {
-            dt: NaN,
-            t: performance.now(),
+            dt: this.updateTick,
+            t: 0,
         };
     }
 
@@ -39,15 +39,13 @@ export default class GameLoopProvider extends ContainerEventEmitter {
         if (this.breakLoop || this.updateInProgress) {
             return;
         }
-        let t = performance.now();
         this.updateInProgress = true;
-        this.loopInfo.dt = t - this.loopInfo.t;
-        this.loopInfo.t = t;
         await this.emit(LifecycleEvents.OnBeforeUpdate, this.loopInfo);
         await this.emit(LifecycleEvents.OnUpdate, this.loopInfo);
         this.updateInProgress = false;
         this.renderedLatestUpdate = false;
         await this.emit(LifecycleEvents.OnAfterUpdate, this.loopInfo);
+        this.loopInfo.t += this.updateTick;
     }
 
     private async render() {
