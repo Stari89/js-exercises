@@ -5,7 +5,7 @@ import { ILoopInfo } from '../util/loop-info';
 
 @Injectable()
 export default class GameLoopProvider extends ContainerEventEmitter {
-    private readonly updateTick = 5; // ms
+    private readonly updateTick = 10; // ms
     private loopInfo: ILoopInfo;
     private breakLoop: boolean;
 
