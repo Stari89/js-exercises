@@ -11,9 +11,9 @@ export default class LightSystem implements OnSceneInited {
     async onSceneInited() {
         const s = this.entityProvider.getFirstComponent(SceneComponent);
         const entities = this.entityProvider.getEntitiesWithComponents(LightComponent);
-        entities.forEach((e) => {
+        for (const e of entities) {
             const l = e.get(LightComponent);
             s.scene.add(l.light);
-        });
+        }
     }
 }

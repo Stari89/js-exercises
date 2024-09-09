@@ -11,7 +11,7 @@ export default class MeshTransformSystem implements OnUpdate {
 
     async onUpdate(loopInfo: ILoopInfo) {
         const entities = this.entityProvider.getEntitiesWithComponents(MeshComponent, TransformComponent);
-        entities.forEach((e) => {
+        for (const e of entities) {
             const m = e.get(MeshComponent);
             const t = e.get(TransformComponent);
 
@@ -20,6 +20,6 @@ export default class MeshTransformSystem implements OnUpdate {
             m.mesh.scale.x = t.scale.x;
             m.mesh.scale.y = t.scale.y;
             m.mesh.rotation.z = t.rotation;
-        });
+        }
     }
 }
