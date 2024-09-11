@@ -1,6 +1,7 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const path = require('path');
+const WorkerUrlPlugin = require('worker-url/plugin');
 
 module.exports = {
     entry: './src/index.ts',
@@ -42,9 +43,15 @@ module.exports = {
             meta: { viewport: 'width=device-width, user-scalable=no' },
         }),
         new CleanWebpackPlugin(),
+        new WorkerUrlPlugin(),
     ],
     resolve: {
         extensions: ['.tsx', '.ts', '.js'],
+        alias: {
+            os: false,
+            child_process: false,
+            worker_threads: false,
+        },
     },
     watch: true,
 };

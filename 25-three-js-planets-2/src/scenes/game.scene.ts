@@ -67,10 +67,10 @@ export default class GameScene extends BaseScene {
         );
         this.entityProvider.pushNextScene(planetEntity2);
 
-        // 200: ~11ms => ~6ms => ~4ms => ~3ms
-        // 500: ~70ms => ~36ms => ~26ms => ~20ms
-        // 1000: ??ms => ~137ms => ~108ms => ~78ms
-        for (let i = 0; i < 500; i++) {
+        // 200: ~11ms => ~6ms => ~4ms => ~3ms      | ~3ms
+        // 500: ~70ms => ~36ms => ~26ms => ~20ms   | ~9ms
+        // 1000: ??ms => ~137ms => ~108ms => ~78ms | ~19ms
+        for (let i = 0; i < 1000; i++) {
             const peble = this.celestialBodyFactory.generateCelestialBody(
                 new Vector2(Math.random() * 1000 - 500, Math.random() * 1000 - 500),
                 new Vector2(Math.random() * 0.2 - 0.1, Math.random() * 0.2 - 0.1),

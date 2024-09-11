@@ -5,12 +5,17 @@ import { ILoopInfo } from '../util/loop-info';
 import { Injectable } from '../decorators/injectable';
 import { OnBeforeUpdate, OnUpdate } from '../util/lifecycle';
 import EntityProvider from '../providers/entity.provider';
+import WorkerProvider from '../providers/worker.provider';
+import Helpers from '../util/helpers';
 
 @Injectable()
 export default class GravitySystem implements OnBeforeUpdate, OnUpdate {
     private readonly G: number = 0.00000000075;
 
-    constructor(private entityProvider: EntityProvider) {}
+    constructor(
+        private entityProvider: EntityProvider,
+        private workerProvider: WorkerProvider,
+    ) {}
 
     async onBeforeUpdate(loopInfo: ILoopInfo) {
         const entities = this.entityProvider.getEntitiesWithComponents(GravityComponent, TransformComponent);
@@ -23,30 +28,28 @@ export default class GravitySystem implements OnBeforeUpdate, OnUpdate {
 
     async onUpdate(loopInfo: ILoopInfo) {
         const entities = this.entityProvider.getEntitiesWithComponents(GravityComponent, TransformComponent);
-        const tempVector = new Vector2();
+        const entityComponents: Array<[GravityComponent, TransformComponent]> = entities.map((e) => [
+            e.get(GravityComponent),
+            e.get(TransformComponent),
+        ]);
 
-        for (const e of entities) {
-            const g = e.get(GravityComponent);
-            const t = e.get(TransformComponent);
+        const size = Math.ceil(entityComponents.length / this.workerProvider.maxWorkers);
+        const dividedEntityComponentsList = Helpers.divideArray(entityComponents, this.workerProvider.maxWorkers);
+        const workerPromise = (dividedEntityComponents: Array<[GravityComponent, TransformComponent]>, idx: number) =>
+            this.workerProvider.workerPool
+                .exec('onUpdate', [dividedEntityComponents, entityComponents, this.G, loopInfo])
+                .then((result: Array<[GravityComponent, TransformComponent]>) => {
+                    for (let i = 0; i < result.length; i++) {
+                        const j = i + size * idx;
+                        const e = entities[j];
+                        const g = e.get(GravityComponent);
+                        const t = e.get(TransformComponent);
 
-            g.netAcceleration.set(0, 0);
-
-            for (const e2 of entities) {
-                if (e == e2) continue;
-                const g2 = e2.get(GravityComponent);
-
-                tempVector.copy(g2.preUpdatedPosition).sub(g.preUpdatedPosition);
-                const distanceSq = tempVector.lengthSq();
-
-                // Avoid division by zero
-                if (distanceSq === 0) continue;
-
-                const accelerationMagnitude = (g2.mass * this.G) / distanceSq;
-                tempVector.normalize().multiplyScalar(accelerationMagnitude);
-                g.netAcceleration.add(tempVector);
-            }
-            g.velocity.addScaledVector(g.netAcceleration, loopInfo.dt);
-            t.position.addScaledVector(g.velocity, loopInfo.dt);
-        }
+                        const newEntity = result[i];
+                        g.velocity = new Vector2(newEntity[0].velocity.x, newEntity[0].velocity.y);
+                        t.position = new Vector2(newEntity[1].position.x, newEntity[1].position.y);
+                    }
+                });
+        await Promise.all(dividedEntityComponentsList.map((dce, idx) => workerPromise(dce, idx)));
     }
 }

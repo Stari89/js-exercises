@@ -19,4 +19,15 @@ export default class Helpers {
     public static getProperty(obj: any, key: string) {
         return obj[key];
     }
+
+    public static divideArray<T>(arr: T[], partsCount: number): T[][] {
+        const result: T[][] = [];
+        const size = Math.ceil(arr.length / partsCount);
+
+        for (let i = 0; i < arr.length; i += size) {
+            result.push(arr.slice(i, i + size)); // Slice the array into chunks
+        }
+
+        return result;
+    }
 }
