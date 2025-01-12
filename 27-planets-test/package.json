@@ -1,0 +1,31 @@
+{
+    "name": "27-planets-test",
+    "version": "1.0.0",
+    "main": "index.js",
+    "scripts": {
+        "start": "webpack serve --mode development --open",
+        "build": "webpack --mode production",
+        "format": "prettier --write \"src/**/*.ts\""
+    },
+    "author": "Damjan Kovačič",
+    "license": "ISC",
+    "description": "",
+    "devDependencies": {
+        "clean-webpack-plugin": "^4.0.0",
+        "css-loader": "^7.1.2",
+        "file-loader": "^6.2.0",
+        "html-webpack-plugin": "^5.6.0",
+        "prettier": "^3.3.3",
+        "style-loader": "^4.0.0",
+        "ts-loader": "^9.5.1",
+        "typescript": "^5.6.2",
+        "webpack": "^5.94.0",
+        "webpack-cli": "^5.1.4",
+        "webpack-dev-server": "^5.1.0",
+        "worker-url": "^1.1.0"
+    },
+    "dependencies": {
+        "reflect-metadata": "^0.2.2",
+        "workerpool": "^9.1.3"
+    }
+}
