@@ -13,10 +13,12 @@ import CelestialBodyFactory from '../factories/celestial-body.factory';
 import MeshTransformSystem from '../systems/mesh-transform.system';
 import GravitySystem from '../systems/gravity.system';
 import { Injectable } from '../decorators/injectable';
+import StateProvider from '../providers/state.provider';
 
 @Injectable()
 export default class GameScene extends BaseScene {
     constructor(
+        private stateProvider: StateProvider,
         private viewportProvider: ViewportProvider,
         private entityProvider: EntityProvider,
         private celestialBodyFactory: CelestialBodyFactory,
@@ -70,7 +72,7 @@ export default class GameScene extends BaseScene {
         // 200: ~11ms => ~6ms => ~4ms => ~3ms      | ~3ms
         // 500: ~70ms => ~36ms => ~26ms => ~20ms   | ~9ms
         // 1000: ??ms => ~137ms => ~108ms => ~78ms | ~19ms
-        for (let i = 0; i < 1000; i++) {
+        for (let i = 0; i < 500; i++) {
             const peble = this.celestialBodyFactory.generateCelestialBody(
                 new Vector2(Math.random() * 1000 - 500, Math.random() * 1000 - 500),
                 new Vector2(Math.random() * 0.2 - 0.1, Math.random() * 0.2 - 0.1),

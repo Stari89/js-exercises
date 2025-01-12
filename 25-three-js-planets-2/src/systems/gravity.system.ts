@@ -33,8 +33,11 @@ export default class GravitySystem implements OnBeforeUpdate, OnUpdate {
             e.get(TransformComponent),
         ]);
 
-        const size = Math.ceil(entityComponents.length / this.workerProvider.maxWorkers);
-        const dividedEntityComponentsList = Helpers.divideArray(entityComponents, this.workerProvider.maxWorkers);
+        const size = Math.ceil(entityComponents.length / this.workerProvider.workerPool.maxWorkers);
+        const dividedEntityComponentsList = Helpers.divideArray(
+            entityComponents,
+            this.workerProvider.workerPool.maxWorkers,
+        );
         const workerPromise = (dividedEntityComponents: Array<[GravityComponent, TransformComponent]>, idx: number) =>
             this.workerProvider.workerPool
                 .exec('onUpdate', [dividedEntityComponents, entityComponents, this.G, loopInfo])

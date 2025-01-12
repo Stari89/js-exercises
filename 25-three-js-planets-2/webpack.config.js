@@ -8,6 +8,11 @@ module.exports = {
     devtool: 'inline-source-map',
     devServer: {
         static: './dist',
+        // for shared array buffer
+        headers: {
+            'Cross-Origin-Opener-Policy': 'same-origin',
+            'Cross-Origin-Embedder-Policy': 'require-corp',
+        },
     },
     performance: {
         maxAssetSize: 10485760,

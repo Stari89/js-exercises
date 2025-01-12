@@ -4,6 +4,16 @@ import TransformComponent from '../components/transform.component';
 import { ILoopInfo } from '../util/loop-info';
 import { Vector2 } from 'three';
 
+let inites = false;
+let sharedBuffer: SharedArrayBuffer;
+let int32View: Float64Array;
+
+const init = (sab: SharedArrayBuffer) => {
+    sharedBuffer = sab;
+    int32View = new Float64Array(sharedBuffer);
+    console.log('worker inited');
+};
+
 const onUpdate = (
     dividedEntityComponents: Array<[GravityComponent, TransformComponent]>,
     entityComponents: Array<[GravityComponent, TransformComponent]>,
@@ -47,9 +57,5 @@ const onUpdate = (
     return dividedEntityComponents;
 };
 
-const add = (a: any): number => {
-    console.log('worker log', a.length, a[0][0], a[0][1]);
-    return 10;
-};
-
-worker({ add: add, onUpdate });
+worker({ init, onUpdate });
+// init();
