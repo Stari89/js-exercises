@@ -44,7 +44,7 @@ module.exports = {
     },
     plugins: [
         new HtmlWebpackPlugin({
-            title: '26 Shared Game State',
+            title: '27 ecs',
             meta: { viewport: 'width=device-width, user-scalable=no' },
         }),
         new CleanWebpackPlugin(),
